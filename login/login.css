@@ -1,0 +1,46 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.login_wrap{
+    border: 3px solid black;
+    border-radius: 20px;
+    width: 50%;
+    height: 500px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+
+
+.login_wrap input{
+    width: 70%;
+    margin-left: 10%;
+    margin-top: 6%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    border-radius: 20px;
+    font-size: 200%;
+}
+
+.login_wrap button{
+    margin-bottom: 6%;
+    font-size: 100%;
+    border: 1px solid black;
+    border-radius: 20px;
+    margin-left: 40%;
+    padding: 0.5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    font-size: 200%;
+}
+
+.login_wrap button:hover{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}

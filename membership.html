@@ -3,9 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>pictures</title>
+    <link rel="stylesheet" href="header/header.css">
+    <link rel="stylesheet" href="membership/membership.css">
+    <script defer src=""></script>
+    <script defer src="membership/membership.js"></script>
 </head>
 <body>
-    
+    <header>
+        <button class="main_btn"><a href="main.html">Pictures</a></button>
+        <span class="left_wrap">
+            <button class="login_btn"><a href="login.html">로그인</a></button>
+            <button class="membership_btn"><a href="membership.html">회원가입</a></button>
+        </span>
+    </header>
+    <hr class="split">
+    <div class="container">
+        <div class="member">
+            <div class="wrap">
+                <span class="input"><input type="text"></span><span>ID: </span>
+            </div>
+            <div class="wrap">
+                <span class="input"><input type="password"></span><span>password: </span>
+            </div>
+            <div class="wrap">
+                <span class="input"><input type="password"></span><span>Confirm password: </span>
+            </div>
+            <div class="wrap">
+                <span class="input"><input type="text"></span><span>Nickname: </span>
+            </div>
+            <div class="submit">
+                <button>submit</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

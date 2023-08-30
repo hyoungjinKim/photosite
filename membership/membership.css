@@ -1,0 +1,58 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.member{
+    border: 3px solid black;
+    border-radius: 20px;
+    width: 80%;
+    height: 700px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.wrap{
+    margin-top: 2%;
+    white-space : nowrap;
+}
+
+.wrap span ,.wrap button{
+    float: right;
+}
+
+.wrap span{
+    font-size: 200%;
+    margin-left: 1%;
+}
+
+.input{
+    margin-right: 50%;
+}
+
+input{
+    width: 300%;
+    padding: 5%;
+    border-radius: 20px;
+    font-size: 80%;
+}
+
+.submit{
+    margin-bottom: 2%;
+    margin-right: 3%;
+}
+
+.submit button{
+    border: 1px solid black;
+    border-radius: 15px;
+    font-size: 200%;
+    cursor: pointer;
+}
+
+.submit button:hover{
+    background-color: black;
+    color: white;
+}
