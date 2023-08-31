@@ -8,40 +8,40 @@
 .member{
     border: 3px solid black;
     border-radius: 20px;
-    width: 80%;
+    width: 40vw;
     height: 700px;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    padding-left: 20vw;
 }
 
 .wrap{
-    margin-top: 2%;
-    white-space : nowrap;
+    margin-top: 5%;
+    position: relative;    
 }
 
-.wrap span ,.wrap button{
-    float: right;
+.wrap div{
+    position: absolute;
+    right: 0;
+    margin-right: 40%;
 }
 
-.wrap span{
-    font-size: 200%;
-    margin-left: 1%;
+.wrap div span{
+    font-size: 2vw;
+    white-space: nowrap;
 }
 
-.input{
-    margin-right: 50%;
-}
 
-input{
-    width: 300%;
-    padding: 5%;
+.input input{
+    padding-top: 1%;
+    padding-bottom: 1%;
     border-radius: 20px;
-    font-size: 80%;
+    font-size: 100%;
 }
 
 .submit{
-    margin-bottom: 2%;
+    margin-bottom: 5%;
     margin-right: 3%;
 }
 
@@ -49,6 +49,7 @@ input{
     border: 1px solid black;
     border-radius: 15px;
     font-size: 200%;
+    float: right;
     cursor: pointer;
 }
 

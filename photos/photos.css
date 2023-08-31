@@ -1,0 +1,31 @@
+.title_wrap{
+    font-size: 400%;
+    margin-top: 1%;
+    margin-left: 2%;
+}
+
+.title{
+    font-size: 80%;
+}
+
+.date{
+    font-size: 40%;
+    margin-left: 1%;
+}
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.left{
+    width: 50%;
+}
+
+.img{
+    height: 500px;
+
+    object-fit: contain;
+}
+
