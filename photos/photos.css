@@ -20,12 +20,64 @@
 }
 
 .left{
-    width: 50%;
+    width: 60%;
+    margin-left: 2%;
 }
 
 .img{
-    height: 500px;
-
+    width: 60%;
     object-fit: contain;
 }
+
+.right{
+    width: 40%;
+}
+
+.right div{
+    font-size: 50px;
+    margin-top: 5%;
+}
+
+.right div button{
+    font-size: 60px;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 1%;
+}
+
+.right div button:hover{
+    background-color: black;
+    color: white;
+}
+
+.comment_wrap{
+    margin-left: 2%;
+    margin-top: 1%;
+}
+
+.comment_title{
+    font-size: 50px;
+}
+
+.comment{
+    margin-top: 1%;
+    font-size: 30px;
+    margin-left: 1%;
+}
+
+.buttton_wrap{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.buttton_wrap button{
+    font-size: 25px;
+    margin-left: 2%;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 0.5%;
+}
+
+
 
