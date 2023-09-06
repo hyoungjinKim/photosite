@@ -1,0 +1,49 @@
+.container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.sidebar{
+    width: 10%;
+}
+
+.sidebar div{
+    position: fixed;
+    width: 10%;
+}
+
+.Interval{
+    margin-top: 3%;
+    background-color: black;
+}
+
+.Interval1{
+    margin-top: 7%;
+}
+
+.Interval2{
+    margin-top: 11%;
+}
+
+.menu{
+    font-size: 1vw;
+    margin-left: 10%;
+}
+
+.select{
+    color: white;
+}
+.main{
+    width: 90%;
+    border-left: 3px solid black;
+}
+
+.mypage_wrap{
+    border-bottom: 1px solid black;
+}
+
+.mypage{
+    font-size: 300%;
+    margin: 1%;
+}

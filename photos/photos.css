@@ -50,16 +50,16 @@
     color: white;
 }
 
-.comment_wrap{
+.explanation_wrap{
     margin-left: 2%;
     margin-top: 1%;
 }
 
-.comment_title{
+.explanation_title{
     font-size: 50px;
 }
 
-.comment{
+.explanation{
     margin-top: 1%;
     font-size: 30px;
     margin-left: 1%;
@@ -79,5 +79,43 @@
     padding: 0.5%;
 }
 
+.comment_wrap{
+    margin-left: 1%;
+    margin-top: 1%;
+    font-size: 180%;
+}
 
+.date{
+    margin-left: 0.5%;
+    font-size: 60%;
+}
 
+.comment{
+    margin-left: 1%;
+}
+
+.reply_wrap{
+    margin-top: 1%;
+    margin-left: 4%;
+    font-size: 130%;
+}
+
+.write_wrap{
+    display: flex;
+    justify-content: center;
+}
+
+.write{
+    width: 80%;
+    height: 80px;
+    font-size: 120%;
+}
+
+.submit{
+    width: 3%;
+    height: 40%;
+    font-size: 120%;
+    border: 1px solid black;
+    margin-left: 1%;
+    margin-top: 60px;
+}
