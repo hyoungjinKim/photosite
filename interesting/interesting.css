@@ -1,0 +1,91 @@
+.container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.sidebar{
+    width: 10%;
+}
+
+.sidebar div{
+    position: fixed;
+    width: 10%;
+}
+
+.Interval{
+    margin-top: 3%;
+}
+
+.Interval1{
+    margin-top: 7%;
+    background-color: black;
+}
+
+.Interval2{
+    margin-top: 11%;
+}
+
+.menu{
+    font-size: 1vw;
+    margin-left: 10%;
+}
+
+.select{
+    color: white;
+}
+.main{
+    width: 90%;
+    border-left: 3px solid black;
+}
+
+.mypage_wrap{
+    border-bottom: 1px solid black;
+}
+
+.mypage{
+    font-size: 300%;
+    margin: 1%;
+}
+
+.space{
+    display: flex;
+    justify-content: space-between;
+    padding: 1%;
+    border-bottom: 1px solid black;
+}
+
+.left{
+    display: flex;
+}
+
+.img_wrap{
+    width: 23%;
+}
+
+.my_img{
+    object-fit: contain;
+    width: 100%;
+}
+
+.my_photo{
+    margin-left: 1%;
+    margin-top: 1%;
+    font-size: 1.5vw;
+}
+
+.title, .comment{
+    font-size: 1.2vw;
+}
+
+.down{
+    font-size: 1vw;
+    border:  1px solid black;
+    border-radius: 20px;
+}
+
+.down:hover{
+    background-color: black;
+    color: white;
+}
+
