@@ -47,3 +47,33 @@
     font-size: 300%;
     margin: 1%;
 }
+
+.space{
+    display: flex;
+    justify-content: space-between;
+    padding: 1%;
+    border-bottom: 1px solid black;
+}
+
+.left{
+    display: flex;
+}
+
+.img_wrap{
+    width: 23%;
+}
+
+.my_img{
+    object-fit: contain;
+    width: 100%;
+}
+
+.my_photo{
+    margin-left: 1%;
+    margin-top: 1%;
+    font-size: 1.5vw;
+}
+
+.title, .comment{
+    font-size: 1.2vw;
+}
