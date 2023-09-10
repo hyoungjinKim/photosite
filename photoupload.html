@@ -18,17 +18,36 @@
         </span>
     </header>
     <hr class="split">
-    <div class="upload_wrap">
-        <div>Photo upload</div>
-        <div><input type="file"></div>
-    </div>
-    <div class="upload_wrap">
-        <div>Title</div>
-        <div><textarea></textarea></div>
-    </div>
-    <div class="upload_wrap">
-        <div>Photo upload</div>
-        <div><textarea></textarea></div>
+    <div class="container">
+        <div class="left">
+            <div class="upload_wrap">
+                <div class="upload">Photo upload</div>
+                <div><input type="file"></div>
+            </div>
+            <div class="upload_wrap">
+                <div class="upload">Title</div>
+                <div><textarea class="text"></textarea></div>
+            </div>
+            <div class="upload_wrap">
+                <div class="upload">Photo upload</div>
+                <div><textarea class="text"></textarea></div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="tag_title">Tag select</div>
+            <div class="overlap">(중복 체크 가능)</div>
+            <div><input class="tag" type="checkbox">Human</div>
+            <div><input class="tag" type="checkbox">Baby</div>
+            <div><input class="tag" type="checkbox">Animal</div>
+            <div><input class="tag" type="checkbox">Nature</div>
+            <div><input class="tag" type="checkbox">Universe</div>
+            <div><input class="tag" type="checkbox">City</div>
+            <div><input class="tag" type="checkbox">Place</div>
+            <div><input class="tag" type="checkbox">Building</div>
+            <div><input class="tag" type="checkbox">Food</div>
+            <div><input class="tag" type="checkbox">Other</div>
+        <button class="submit">submit</button>
+        </div>
     </div>
 </body>
 </html>
