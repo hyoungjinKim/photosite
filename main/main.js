@@ -15,3 +15,4 @@ function startSlider() {
 
 showImage(currentIndex);
 startSlider();
+
