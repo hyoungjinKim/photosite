@@ -1,4 +1,59 @@
 .upload_wrap{
-    margin-top: 3%;
     margin-left: 2%;
+    margin-top: 5%;
+}
+
+.upload{
+    font-size: 150%;
+}
+
+.text{
+    width: 70%;
+    height: 5vh;
+}
+
+.container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.left{
+    width: 50%;
+    margin-top: 2%;
+}
+
+.right{
+    width: 50%;
+    margin-top: 5%;
+}
+
+.tag_title{
+    font-size: 150%;
+    margin-bottom: 2%;
+}
+
+.overlap{
+    font-size: 50%;
+}
+
+.tag{
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+.submit{
+    margin-top: 4%;
+}
+
+.submit{
+    margin-left: 5%;
+    margin-top: 7%;
+    font-size: 150%;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.submit:hover{
+    background-color: black;
+    color: white
 }
