@@ -8,4 +8,9 @@ reply_btn.addEventListener('click', function(){
 
 reply_cancle.addEventListener('click', function(){
     reply_input.innerHTML=``
+<<<<<<< HEAD
 })
+=======
+})
+
+>>>>>>> 23dc2b50ad9cc77457880ea374cf1df811782a9e
