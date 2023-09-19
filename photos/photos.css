@@ -105,10 +105,16 @@
     justify-content: center;
 }
 
+.reply_input{
+    width: 30%;
+    resize: none;
+}
+
 .write{
     width: 80%;
     height: 80px;
     font-size: 120%;
+    resize: none;
 }
 
 .submit{
