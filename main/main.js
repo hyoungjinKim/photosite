@@ -1,4 +1,6 @@
 const images = document.querySelectorAll('.main_photo');
+
+//화면 슬라이드
 let currentIndex = 0;
 
 function showImage(index) {
@@ -16,3 +18,14 @@ function startSlider() {
 showImage(currentIndex);
 startSlider();
 
+
+function tag(checkbox) {
+  sessionStorage.setItem(checkbox.value, checkbox.checked);
+}
+window.onload = function() {
+  let checkboxes = document.querySelectorAll('.tag');
+  checkboxes.forEach(function(checkbox) {
+      var isChecked = sessionStorage.getItem(checkbox.value) === 'true';
+      checkbox.checked = isChecked;
+  });
+}
