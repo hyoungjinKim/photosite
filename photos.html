@@ -45,26 +45,13 @@
         <button>추천</button>
     </div>
     <hr class="split">
-    <div class="comment_wrap">
-        <div class="Writer">
-            <span>user</span><span class="date">(2023/09/03)</span>
-        </div>
-        <div class="comment">comments</div>
-        <div>
-            <div><button id="reply_btn">답글</button><button id="reply_cancle">취소</button></div>
-            <div id="reply_input"></div>
-        </div>
-    </div>
-    <div class="reply_wrap" id="reply_wrap">
-        <div class="Writer">
-            <span>user</span><span class="date">(2023/09/03)</span>
-        </div>
-        <div class="comment" id="reply_comment">comments</div>
+    <div id="commentpart">
+        
     </div>
     <hr>
     <div class="write_wrap">
-        <input class="write" placeholder="Write a comment">
-        <button class="submit">submit</button>
+        <input class="write" id="comment_input" placeholder="Write a comment">
+        <button class="submit" onclick="Commentsubmit(this)">submit</button>
     </div>
 </body>
 </html>

@@ -1,24 +1,44 @@
 const reply_btn=document.getElementById('reply_btn');
-const reply_input=document.getElementById('reply_input');
 const reply_cancle=document.getElementById('reply_cancle');
-const reply_wrap=document.getElementById('reply_wrap');
+const commnetpart=document.getElementById('commentpart');
+
+function Commentsubmit(){
+    let comment_input=document.getElementById('comment_input');
+    commnetpart.innerHTML +=    
+    `<div class="comment_wrap">
+     <div class="Writer">
+        <span>user</span><span class="date">(2023/09/03)</span>
+     </div>
+     <div class="comment">${comment_input.value}</div>
+     <div>
+         <div><button id="reply_btn" onclick="Replywrite(this)">답글</button><button id="reply_cancle" onclick="Replycancle(this)">취소</button></div>
+         <div id="reply_input"></div>
+     </div>
+         <div class="reply_wrap" id="reply_wrap">
+         </div>
+     </div>`;
+     comment_input.value=``;
+}
 
 
 //대댓글 작성창 생성
-reply_btn.addEventListener('click', function(){
+ function Replywrite(){
+    const reply_input=document.getElementById('reply_input');
     reply_input.innerHTML=`<span><input type="text" class="reply_input" id="reply"></span><span><button onclick="Submit()">submit</button></span>`;
-});
+};
 
 //대댓글 작성창 취소
-reply_cancle.addEventListener('click', function(){
+function Replycancle(){
+    const reply_input=document.getElementById('reply_input');
     reply_input.innerHTML=``;
-});
+};
 
 //대댓글 작성
 function Submit(){
+    const reply_wrap=document.getElementById('reply_wrap');
     let reply=document.getElementById('reply').value;
     reply_input.innerHTML=``;
-    reply_wrap.innerHTML=
+    reply_wrap.innerHTML +=
     `<div class="Writer">
         <span>user</span><span class="date">(2023/09/03)</span>
     </div>
