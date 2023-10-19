@@ -7,6 +7,7 @@ if(login != 1)
 }
 if (login ==1) {
   nav.innerHTML = `
+    <span>nickname</span>
     <button class="login_btn" onclick="logout_btn()">로그아웃</button>
     <button class="membership_btn"><a href="mypictures.html">마이페이지</a></button>`;
 }

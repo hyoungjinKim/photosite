@@ -23,7 +23,7 @@
         <div class="left">
             <div class="upload_wrap">
                 <div class="upload">Photo upload</div>
-                <div><input type="file"></div>
+                <div><input type="file" onchange="readURL(this)"></div>
             </div>
             <div class="upload_wrap">
                 <div class="upload">Title</div>
@@ -32,6 +32,9 @@
             <div class="upload_wrap">
                 <div class="upload">Photo upload</div>
                 <div><textarea class="text"></textarea></div>
+            </div>
+            <div class="upload_wrap">
+                <img class="preview" id="preview">
             </div>
         </div>
         <div class="right">
