@@ -51,9 +51,38 @@
     margin: 1%;
 }
 
+
+
+.search{
+    position: relative;
+    width: 10%;
+    margin-right: 3%;
+}
+
+.search_input {
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  padding: 2%;
+  font-size: 14px;
+}
+
+.search_img {
+  position : absolute;
+  width: 15px;
+  top: 20%;
+  right: 0;
+  cursor: pointer;
+}
+
 .dropdown{
+    position: absolute;
     display: inline-block;
-    margin-right: 4%;
+    padding: 0.2%;
+    border: 1px solid black;
+    margin-top: 3%;
+    padding: 2%;
+    border-radius: 10px;
 }
 
 .tag_select{
@@ -64,7 +93,7 @@
     background-color: white;
     border-radius: 10px;
     padding: 10px;
-    right: 2%;
+    width: 350%;
 }
 
 .tag_select div{
