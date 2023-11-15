@@ -135,13 +135,15 @@
     justify-content: center;
 }
 
+
 .tag_wrap span{
     border: 1px solid black;
     border-radius: 300%;
-    width: 4%;
+    width: 7%;
+    margin-right: 3%;
     font-size: 120%;
     text-align: center;
-    padding: 0.1%;
+    padding: 0.3%;
     margin-left: 1%;
 }
 
