@@ -135,6 +135,15 @@
     justify-content: center;
 }
 
+.sorting_wrap{
+    font-size: 110%;
+    margin-left: 3%;
+}
+
+.sorting_wrap select{
+    font-size: 100%;
+    border-radius: 10px;
+}
 
 .tag_wrap span{
     border: 1px solid black;
