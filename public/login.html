@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pictures</title>
+    <link rel="stylesheet" href="./public/header/header.css">
+    <link rel="stylesheet" href="./public/login/login.css">
+    <script defer src="./public/header/header.js"></script>
+    <script defer src="./public/login/login.js"></script>
+</head>
+<body>
+    <header>
+        <button class="main_btn"><a href="main.html">Pictures</a></button>
+        <span class="left_wrap" id="left">
+            <button class="login_btn"><a href="login.html">로그인</a></button>
+            <button class="membership_btn"><a href="membership.html">회원가입</a></button>
+        </span>
+    </header>
+    <hr class="split">
+    <form method="post" action="/login">
+        <div class="container">
+            <div class="login_wrap">
+                <div>
+                    <input type="text" placeholder="ID">
+                </div>
+                <div>
+                    <input type="password" placeholder="Password">
+                </div>
+                <div>
+                    <button type="submit" id="login">login</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
