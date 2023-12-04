@@ -2,18 +2,27 @@ const express=require('express')
 const mysql= require('mysql2')
 const path = require('path')
 const static = require('serve-static')
+const redis=require('redis')
 const app= express()
 
+//db 정보 받아옴
 const dbconfig = require(`./config/dbconfig.json`)
 
+//받아온 데이터 변환
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
+
+//public폴더를 최상위 폴더로 바꿈
 app.use(express.static("public"));
 app.use('/', static(path.join(__dirname,`public`)));
 
-
+//포트 번호
 const port= 4003;
 
+const redisClient = redis.createClient(process.env.REDIS_PORT);
+module.exports = redisClient;
+
+//db pool로 생성
 const pool = mysql.createPool({
     connectionLimit: 10,
     host:dbconfig.host,
