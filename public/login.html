@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pictures</title>
-    <link rel="stylesheet" href="./public/header/header.css">
-    <link rel="stylesheet" href="./public/login/login.css">
-    <script defer src="./public/header/header.js"></script>
-    <script defer src="./public/login/login.js"></script>
+    <link rel="stylesheet" href="header/header.css">
+    <link rel="stylesheet" href="login/login.css">
+    <script defer src="header/header.js"></script>
+    <script defer src="login/login.js"></script>
 </head>
 <body>
     <header>
@@ -18,14 +18,14 @@
         </span>
     </header>
     <hr class="split">
-    <form method="post" action="/login">
+    <form method="post" action="/process/login">
         <div class="container">
             <div class="login_wrap">
                 <div>
-                    <input type="text" placeholder="ID">
+                    <input type="text" placeholder="ID" name="id">
                 </div>
                 <div>
-                    <input type="password" placeholder="Password">
+                    <input type="password" placeholder="Password" name="password">
                 </div>
                 <div>
                     <button type="submit" id="login">login</button>
