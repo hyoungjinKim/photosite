@@ -134,7 +134,9 @@ app.post('/login' , async(req,res)=>{
                           authorized: true,
                         };
                         console.log(req.session.users.name);
-                        res.status(200).redirect('/main.html');
+                        res.writeHead(200,{
+                          'set-cookie': ['login=1']
+                        }).redirect('/main.html');
                         res.end();
                       };                   
                     res.end();
