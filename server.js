@@ -1,26 +1,40 @@
-const express=require('express')
-const mysql= require('mysql2')
-const path = require('path')
-const static = require('serve-static')
-const expressSession=require('express-session')
+const express=require('express');
+const mysql= require('mysql2');
+const path = require('path');
+const static = require('serve-static');
+const expressSession=require('express-session');
+const cookie=require('cookie-parser');
+const fs = require('fs');
+const multer = require('multer');
+
+const storage=multer.diskStorage({
+  destination: function(req,file,cd){
+    cd(null,"./public/images/");
+  },
+  filename: function(req,file,cd){
+    const ext=path.extname(file.originalname);
+    cd(null, path.basename(file.originalname,ext)+"-"+Date.now()+ext);
+  },
+});
+
+const upload=multer({ storage : storage});
 
 //db 정보 받아옴
 const dbconfig = require(`./config/dbconfig.json`);
 //session 정보
 const session =require(`./config/session.json`);
-const { write } = require('fs')
+
 //서버 생성
-const app= express()
+const app= express();
 //포트 번호
 const port= 4003;
 
 //받아온 데이터 변환
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json())
-
+app.use(express.json());
 //public폴더를 최상위 폴더로 바꿈
-app.use(express.static("router"));
 app.use('/', static(path.join(__dirname,`public`)));
+app.use(cookie());
 
 //express-session
 app.use(
@@ -30,7 +44,7 @@ app.use(
       resave: false,//세션을 언제나 저장할지 설정
       saveUninitialized: false,//세션에 저장할 내역이 없더라도 처음부터 세션을 생성할지 설정
       cookie : {//세션 쿠키 설정
-                //httpOnly: true//js로 세션 쿠키를 사용할수 없도록 함
+                httpOnly: true//js로 세션 쿠키를 사용할수 없도록 함
     }})
 );
 
@@ -115,7 +129,7 @@ app.post('/login' , async(req,res)=>{
                             req.session.destroy((err) => {
                                 if (err) {
                                   console.log("세션 삭제시에 에러가 발생했습니다.");
-                                  res.writeHead('500').write(`<h2>session delete err</h2>`)
+                                  res.writeHead('500').write(`<h2>session delete err</h2>`);
                                   return;
                                 }
                                 console.log("세션이 삭제됐습니다.");
@@ -128,15 +142,11 @@ app.post('/login' , async(req,res)=>{
                       } else {
                         req.session.users = {
                           Logined: true,
-                          id: paramid,
-                          pw: parampassword,
                           name :rows[0].nickname,
                           authorized: true,
                         };
                         console.log(req.session.users.name);
-                        res.writeHead(200,{
-                          'set-cookie': ['login=1']
-                        }).redirect('/main.html');
+                        res.status(200).redirect('/main.html');
                         res.end();
                       };                   
                     res.end();
@@ -144,16 +154,16 @@ app.post('/login' , async(req,res)=>{
                 }
                 else{
                     if(req.session.users){
-                         req.session.destroy((err) => {
+                        req.session.destroy((err) => {
                         if (err) {
                           console.log("세션 삭제시에 에러가 발생했습니다.");
                           return;
                         }
-                        console.log("세션이 삭제됐습니다.");
+                        console.log("세션이 삭제됐습니다.1");
                       });
                     }   
                     console.log(`아이디와 패스워드 일치 안함`);
-                    res.status('500').send(`아이디와 패스워드 일치 안함<h2><a href="/login.html">이동<</a>/h2>`);
+                    res.status(500).redirect('/loginerr.html');
                     res.end();
                     return;
                 }
@@ -161,22 +171,13 @@ app.post('/login' , async(req,res)=>{
         )
     })
 })
+
 //닉네임 가져오기
 app.get("/process/nickname", async(req,res)=>{
     if(req.session.users){
         console.log("닉네임 전송 성공");
         console.log(req.session.users.name);
         res.send(req.session.users.name);
-    }else{
-        await req.session.destroy((err) => {
-            if (err) {
-              console.log("세션 삭제시에 에러가 발생했습니다.");
-              res.writeHead('500').write(`<h2>session delete err</h2>`)
-              return;
-            }
-            console.log("세션이 삭제됐습니다.");
-            res.redirect("/login.html");
-          });
     }
 })
 
@@ -191,7 +192,7 @@ app.get("/logout", async(req, res) => {
           console.log("세션 삭제시에 에러가 발생했습니다.");
           return;
         }
-        console.log("세션이 삭제됐습니다.");
+        console.log("세션이 삭제됐습니다.3");
         res.redirect("/main.html");
       });
     } else {
@@ -200,7 +201,41 @@ app.get("/logout", async(req, res) => {
     }
 });
 
+
+//사진 업로드
+app.post('/upload', upload.single('photo'), async (req, res, next) => {
+  
+  const title = req.body.title;
+  const comment = req.body.comment;
+  const image=`/images/${req.file.filename}`;
+
+  try {
+    if (req.session.users.Logined) {
+      const con = await pool.promise().getConnection();
+      console.log('Connected to database');
+      
+      // 이미지 개수 가져오기
+      const countResults = await con.query('SELECT COUNT(*) AS count FROM photo;');
+      const count = countResults[0][0].count;
+      console.log('데이터 개수: ' + count);
+
+      // 이미지 삽입
+      const imgInput = await con.query('INSERT INTO photo (img_no, img, title, comment) VALUES (?, ?, ?, ?);',
+        [count + 1, image , title, comment]);
+
+      con.release();
+
+      console.log(imgInput);
+      console.log('Insert success');
+      res.status(500).redirect('/photos.html');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('서버 오류');
+  }
+});
+
 app.listen(port, function(err){
     if(err) return console.log(err);
     console.log(`open server listen on port:${port}`);
-})
+});

@@ -18,40 +18,41 @@
         </span>
     </header>
     <hr class="split">
-
-    <div class="container">
-        <div class="left">
-            <div class="upload_wrap">
-                <div class="upload">Photo upload</div>
-                <div><input type="file" onchange="readURL(this)"></div>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <div class="container">
+            <div class="left">
+                <div class="upload_wrap">
+                    <div class="upload">Photo upload</div>
+                    <div><input type="file" onchange="readURL(this)" name="photo"></div>
+                </div>
+                <div class="upload_wrap">
+                    <div class="upload">Title</div>
+                    <div><input class="text" name="title"></div>
+                </div>
+                <div class="upload_wrap">
+                    <div class="upload">Photo upload</div>
+                    <div><input class="text" name="comment"></div>
+                </div>
+                <div class="upload_wrap">
+                    <img class="preview" id="preview">
+                </div>
             </div>
-            <div class="upload_wrap">
-                <div class="upload">Title</div>
-                <div><textarea class="text"></textarea></div>
-            </div>
-            <div class="upload_wrap">
-                <div class="upload">Photo upload</div>
-                <div><textarea class="text"></textarea></div>
-            </div>
-            <div class="upload_wrap">
-                <img class="preview" id="preview">
+            <div class="right">
+                <div class="tag_title">Tag select</div>
+                <div class="overlap">(중복 체크 가능)</div>
+                <div><input class="tag" type="checkbox" name="human">Human</div>
+                <div><input class="tag" type="checkbox" name="baby">Baby</div>
+                <div><input class="tag" type="checkbox" name="animal">Animal</div>
+                <div><input class="tag" type="checkbox" name="nature">Nature</div>
+                <div><input class="tag" type="checkbox" name="Universe">Universe</div>
+                <div><input class="tag" type="checkbox" name="city">City</div>
+                <div><input class="tag" type="checkbox" name="place">Place</div>
+                <div><input class="tag" type="checkbox" name="building">Building</div>
+                <div><input class="tag" type="checkbox" name="food">Food</div>
+                <div><input class="tag" type="checkbox" name="other">Other</div>
+            <button type="submit" class="submit">submit</button>
             </div>
         </div>
-        <div class="right">
-            <div class="tag_title">Tag select</div>
-            <div class="overlap">(중복 체크 가능)</div>
-            <div><input class="tag" type="checkbox">Human</div>
-            <div><input class="tag" type="checkbox">Baby</div>
-            <div><input class="tag" type="checkbox">Animal</div>
-            <div><input class="tag" type="checkbox">Nature</div>
-            <div><input class="tag" type="checkbox">Universe</div>
-            <div><input class="tag" type="checkbox">City</div>
-            <div><input class="tag" type="checkbox">Place</div>
-            <div><input class="tag" type="checkbox">Building</div>
-            <div><input class="tag" type="checkbox">Food</div>
-            <div><input class="tag" type="checkbox">Other</div>
-        <button class="submit"><a href="photos.html">submit</a></button>
-        </div>
-    </div>
+    </form>
 </body>
 </html>
