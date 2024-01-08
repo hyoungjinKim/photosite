@@ -141,6 +141,7 @@ app.post('/login' , async(req,res)=>{
                         res.end();
                       } else {
                         req.session.users = {
+                          id:paramid,
                           Logined: true,
                           name :rows[0].nickname,
                           authorized: true,
@@ -203,12 +204,13 @@ app.get("/logout", async(req, res) => {
 
 
 //사진 업로드
-app.post('/upload', upload.single('photo'), async (req, res, next) => {
+app.post('/upload', upload.single('photo'), async (req, res) => {
   
   const title = req.body.title;
   const comment = req.body.comment;
   const image=`/images/${req.file.filename}`;
-
+  const selectedTags = req.body.tags || [];
+  console.log(selectedTags);
   try {
     if (req.session.users.Logined) {
       const con = await pool.promise().getConnection();
@@ -217,15 +219,22 @@ app.post('/upload', upload.single('photo'), async (req, res, next) => {
       // 이미지 개수 가져오기
       const countResults = await con.query('SELECT COUNT(*) AS count FROM photo;');
       const count = countResults[0][0].count;
-      console.log('데이터 개수: ' + count);
-
+      const userid=  req.session.users.id;
+      
       // 이미지 삽입
-      const imgInput = await con.query('INSERT INTO photo (img_no, img, title, comment) VALUES (?, ?, ?, ?);',
-        [count + 1, image , title, comment]);
-
+      const imgInput = await con.query('INSERT INTO photo (img_no, img, title, comment, user_id) VALUES (?, ?, ?, ?, ?);',
+        [count + 1, image , title, comment, userid]);
       con.release();
+      
+      //tag 삽입
+      for(let i=0; i<selectedTags.length; i++){
+        console.log(selectedTags[i]);
 
-      console.log(imgInput);
+        let tagInput = con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
+        [count+1, selectedTags[i]]);
+      }
+      
+
       console.log('Insert success');
       res.status(500).redirect('/photos.html');
     }
@@ -235,6 +244,7 @@ app.post('/upload', upload.single('photo'), async (req, res, next) => {
   }
 });
 
+//서버 시작
 app.listen(port, function(err){
     if(err) return console.log(err);
     console.log(`open server listen on port:${port}`);
