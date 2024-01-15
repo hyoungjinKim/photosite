@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pictures</title>
+    <link rel="stylesheet" href="header/header.css">
+    <link rel="stylesheet" href="main/main.css">
+    <script defer src="main/main.js"></script>
+</head>
+<body>
+    <%- include('header.ejs') %>
+    <hr class="split">
+    <div class="container">
+        <span class="menu_wrap">
+            <input type="checkbox" class="menu" id="menuicon">
+            <label for="menuicon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <div class="sidebar">
+                <div class="tag_title">Tag</div>
+                <div><input class="tag" type="checkbox" value="Human" onclick="tag(this)">Human</div>
+                <div><input class="tag" type="checkbox" value="Baby" onclick="tag(this)">Baby</div>
+                <div><input class="tag" type="checkbox" value="Animal" onclick="tag(this)">Animal</div>
+                <div><input class="tag" type="checkbox" value="Nature" onclick="tag(this)">Nature</div>
+                <div><input class="tag" type="checkbox" value="Universe" onclick="tag(this)">Universe</div>
+                <div><input class="tag" type="checkbox" value="City" onclick="tag(this)">City</div>
+                <div><input class="tag" type="checkbox" value="Place" onclick="tag(this)">Place</div>
+                <div><input class="tag" type="checkbox" value="Building" onclick="tag(this)">Building</div>
+                <div><input class="tag" type="checkbox" value="Food" onclick="tag(this)">Food</div>
+                <div><input class="tag" type="checkbox" value="Other" onclick="tag(this)" >Other</div>
+            </div>
+        </span>
+        <span class="search_wrap">
+            <div class="search">
+                <input class="search_input" type="text" placeholder="search">
+                <a href="search.ejs"><img class="search_img" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+            </div>
+        </span>
+        <span></span>
+    </div>
+    <div>
+        <% if (photo && photo.length > 3) { %>
+            <% for(let i = 0; i < 4 && i < photo.length; i++){ %>
+                <img class="main_photo" src="<%=photo[i].img%>">
+            <% } %>
+        <% } else { %>
+             <img class="main_photo" src="pictures/cute2.jpg">
+        <% } %>
+    </div>
+    <div class="center_title best">Best Picture</div>
+    <table>
+    <% if (photo && photo.length > 0) { %>
+        <tr>
+            <% for(let i = 0; i < 4 && i < photo.length; i++){ %>
+                <td class="picture_wrap"><a href="photos.ejs"><img class="picture" src="<%=photo[i].img%>"></a><div class="title"><%=photo[i].title%></div></td>
+            <% } %>
+        </tr>
+    <% } else { %>
+        <tr>
+            <td colspan="4">No data available</td>
+          </tr>
+    <% } %>
+    </table>
+    <div class="center_title">Recent picture</div>
+    <table>
+        <% if (photo && photo.length > 0) { %>
+            <% for (let i = 0; i < photo.length; i += 4) { %>
+              <tr>
+                <% for (let j = i; j < i + 4 && j < photo.length; j++) { %>
+                  <td class="picture_wrap">
+                    <a href="photos.ejs">
+                      <img class="picture" src="<%= photo[photo.length-1-j].img %>">
+                    </a>
+                    <div class="title"><%= photo[photo.length-1-j].title %></div>
+                  </td>
+                <% } %>
+              </tr>
+            <% } %>
+          <% } else { %>
+            <tr>
+              <td colspan="4">No data available</td>
+            </tr>
+          <% } %>
+    </table>
+</body>
+</html>

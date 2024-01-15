@@ -147,8 +147,13 @@
     margin-left: 2%;
 }
 
+.picture_wrap{
+    width: 25%;
+}
+
 .picture{
     width: 95%;
+    object-fit: contain;
     margin-left: 3%;
     margin-top: 2%;
 }

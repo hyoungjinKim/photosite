@@ -1,0 +1,15 @@
+<header>
+    <button class="main_btn"><a href="main.ejs">Pictures</a></button>
+    <span class="left_wrap" id="left">
+        <% if (name != '' && typeof name !== 'undefined') { %>
+            <!-- 현재 로그인된 상태 -->
+            <span><%= name %></span>
+            <button class="login_btn"><a href="/logout">로그아웃</a></button>
+            <button class="membership_btn"><a href="mypictures.ejs">마이페이지</a></button>
+        <% } else{ %>
+            <!-- 현재 로그인되어 있지 않은 상태 -->
+            <button class="login_btn"><a href="login.ejs">로그인</a></button>
+            <button class="membership_btn"><a href="membership.ejs">회원가입</a></button>
+        <% } %>
+    </span>
+</header>

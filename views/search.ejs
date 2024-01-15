@@ -6,17 +6,10 @@
     <title>pictures</title>
     <link rel="stylesheet" href="header/header.css">
     <link rel="stylesheet" href="search/search.css">
-    <script defer src="header/header.js"></script>
     <script defer src="search/search.js"></script>
 </head>
 <body>
-    <header>
-        <button class="main_btn"><a href="main.html">Pictures</a></button>
-        <span class="left_wrap" id="left">
-            <button class="login_btn"><a href="login.html">로그인</a></button>
-            <button class="membership_btn"><a href="membership.html">회원가입</a></button>
-        </span>
-    </header>
+    <%- include('header.ejs') %>
     <hr class="split">
     <div class="container">
         <span class="menu_wrap">
@@ -60,10 +53,10 @@
     
     <table>
         <tr>
-            <td><a href="photos.html"><img class="picture" src="pictures/cute1.jpg"></a><div class="title">cute</div></td>
-            <td><a href="photos.html"><img class="picture" src="pictures/cute2.jpg"></a><div class="title">cute</div></td>
-            <td><a href="photos.html"><img class="picture" src="pictures/cute3.jpg"></a><div class="title">cute</div></td>
-            <td><a href="photos.html"><img class="picture" src="pictures/cute4.jpg"></a><div class="title">cute</div></td>
+            <td><a href="photos.ejs"><img class="picture" src="pictures/cute1.jpg"></a><div class="title">cute</div></td>
+            <td><a href="photos.ejs"><img class="picture" src="pictures/cute2.jpg"></a><div class="title">cute</div></td>
+            <td><a href="photos.ejs"><img class="picture" src="pictures/cute3.jpg"></a><div class="title">cute</div></td>
+            <td><a href="photos.ejs"><img class="picture" src="pictures/cute4.jpg"></a><div class="title">cute</div></td>
         </tr>
         <tr>
             <td><a href=""><img class="picture" src="pictures/cute1.jpg"></a><div class="title">cute</div></td>
