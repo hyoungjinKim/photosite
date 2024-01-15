@@ -7,7 +7,6 @@ const cookie=require('cookie-parser');
 const fs = require('fs');
 const multer = require('multer');
 
-
 const app= express();
 
 app.set('views', path.join(__dirname, '/views'));

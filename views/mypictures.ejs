@@ -42,29 +42,37 @@
                     </div>
                 </div>
             </div>
-            <% for (let i = 0; i < photo.length; i++) { %>
-                <div class="space">
-                  <div class="left">
-                    <div class="img_wrap"><img class="my_img" src="<%= photo[photo.length-1-i].img %>"></div>
-                    <div class="my_photo">
-                      <div>
-                        <span>Title: </span><span class="title"><%= photo[photo.length-1-i].title %></span>
+            <% if (photo && photo.length > 0) { %>
+              <% for (let i = 0; i < photo.length; i++) { %>
+                  <div class="space">
+                    <div class="left">
+                      <div class="img_wrap"><img class="my_img" src="<%= photo[photo.length-1-i].img %>"></div>
+                      <div class="my_photo">
+                        <div>
+                          <span>Title: </span><span class="title"><%= photo[photo.length-1-i].title %></span>
+                        </div>
+                        <p>
+                        <div>
+                          <div>Comment: </div><div class="comment"><%= photo[photo.length-1-i].comment %></div>
+                        </div>
                       </div>
+                    </div>
+                    <div>
                       <p>
+                      <div><button>수정</button></div><p>
                       <div>
-                        <div>Comment: </div><div class="comment"><%= photo[photo.length-1-i].comment %></div>
+                        <form method="post" action="/delete">
+                          <input type="hidden" name="index" value="<%= photo.length-1-i %>">
+                          <button type="submit">삭제</button>
+                        </form>
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <p>
-                    <div><button>수정</button></div><p>
-                    <div>
-                      <form method="post" action="/delete">
-                        <input type="hidden" name="index" value="<%= photo.length-1-i %>">
-                        <button type="submit">삭제</button>
-                      </form>
-                    </div>
+                <% } %>
+              <% } else { %>
+                <div class="space">
+                  <div class="left">
+                    사진을 업로드해주세요.
                   </div>
                 </div>
               <% } %>
