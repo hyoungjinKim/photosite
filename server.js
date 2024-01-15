@@ -30,7 +30,6 @@ const dbconfig = require(`./config/dbconfig.json`);
 //session 정보
 const session =require(`./config/session.json`);
 
-//서버 생성
 //포트 번호
 const port= 4003;
 
@@ -324,15 +323,6 @@ app.post('/login' , async(req,res)=>{
     })
 })
 
-//닉네임 가져오기
-app.get("/process/nickname", async(req,res)=>{
-    if(req.session.users){
-        console.log("닉네임 전송 성공");
-        console.log(req.session.users.name);
-        res.send(req.session.users.name);
-    }
-})
-
 //logout
 app.get("/logout", (req, res) => {
     console.log("로그아웃");
@@ -353,7 +343,6 @@ app.get("/logout", (req, res) => {
     }
 });
 
-
 //사진 업로드
 app.post('/upload', upload.single('photo'), async (req, res) => {
   
@@ -363,12 +352,12 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
   const selectedTags = req.body.tags || [];
   console.log(selectedTags);
   try {
-    if (req.session.users.Logined) {
+    if (req.session.users) {
       const con = await pool.promise().getConnection();
       console.log('Connected to database');
       
       // 이미지 개수 가져오기
-      const countResults = await con.query('SELECT COUNT(*) AS count FROM photo;');
+      const countResults = con.query('SELECT COUNT(*) AS count FROM photo;');
       const count = countResults[0][0].count;
       const userid=  req.session.users.id;
       
@@ -383,7 +372,7 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
         selectedTags.forEach(element => {
           console.log(element);
           
-          let tagInput = con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
+          con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
           [count+1, element]);
         });
       }else{
@@ -391,9 +380,6 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
         con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
           [count+1, selectedTags]);
       }
-      
-      
-
       console.log('Insert success');
       res.status(500).redirect('/photos.ejs');
     }
@@ -402,6 +388,31 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
     res.status(500).send('서버 오류');
   }
 });
+
+app.post('/delete', async(req,res)=>{
+      let deletecount=req.body.index;
+      const con = await pool.promise().getConnection();
+      if(req.session.user)
+      {
+        con.query('select * from photo.photo;',
+        [],
+        (err,rows)=>{
+          con.release();
+          if(err){
+            console.log('sql run err');
+            console.dir(err);
+            res.status('500').redirect('/main.ejs');
+            res.end();
+          }
+          
+        });
+      }
+      else{
+        console.log('login err');
+        res.status(500).send('서버 오류');
+      }
+      
+})
 
 //서버 시작
 app.listen(port, function(err){
