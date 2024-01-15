@@ -17,7 +17,7 @@ const storage=multer.diskStorage({
   destination: function(req,file,cd){
     cd(null,"./public/images/");
   },
-  filename: function(req,file,cd){
+  filename: function(file,cd){
     const ext=path.extname(file.originalname);
     cd(null, path.basename(file.originalname,ext)+"-"+Date.now()+ext);
   },
@@ -153,7 +153,7 @@ app.get('/photos.ejs', async (req, res) => {
 });
 
 app.get('/mypictures.ejs', async (req, res) => {
-  if (req.session.users.Logined) {
+  if (req.session.users) {
     await pool.getConnection((err, con) => {
       if (err) {
         console.log('sql run err');
@@ -172,7 +172,6 @@ app.get('/mypictures.ejs', async (req, res) => {
             res.end();
             return;
           }
-          console.log(rows);
           res.render("mypictures.ejs", {
             photo: rows,
           });
@@ -350,35 +349,55 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
   const comment = req.body.comment;
   const image=`/images/${req.file.filename}`;
   const selectedTags = req.body.tags || [];
-  console.log(selectedTags);
   try {
     if (req.session.users) {
       const con = await pool.promise().getConnection();
       console.log('Connected to database');
       
       // 이미지 개수 가져오기
-      const countResults = con.query('SELECT COUNT(*) AS count FROM photo;');
-      const count = countResults[0][0].count;
-      const userid=  req.session.users.id;
-      
-      // 이미지 삽입
-      await con.query('INSERT INTO photo (img_no, img, title, comment, user_id) VALUES (?, ?, ?, ?, ?);',
-        [count + 1, image , title, comment, userid]);
+      const countResults = await con.query('SELECT COUNT(*) AS count FROM photo;');
       con.release();
-      
-      //tag 삽입
-      if(Array.isArray(selectedTags))
-      {
-        selectedTags.forEach(element => {
-          console.log(element);
-          
+      const count = countResults[0][0].count;
+      const [rows] = await con.query('SELECT * FROM photo.photo;');
+      con.release();
+      const max_img_no = rows[rows.length-1].img_no;
+      console.log(max_img_no);
+    
+      const userid=  req.session.users.id;
+      // 이미지 삽입
+      if(count==0){
+        await con.query('INSERT INTO photo (img_no, img, title, comment, user_id) VALUES (?, ?, ?, ?, ?);',
+        [count + 1, image , title, comment, userid]);
+        //tag 삽입
+        if(Array.isArray(selectedTags))
+        {
+          selectedTags.forEach(element => {
+            console.log(element);
+            con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
+            [count+1, element]);
+          });
+        }else{
+          console.log(selectedTags);
           con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
-          [count+1, element]);
-        });
+            [count+1, selectedTags]);
+        }
+        con.release();
       }else{
-        console.log(selectedTags);
-        con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
-          [count+1, selectedTags]);
+        await con.query('INSERT INTO photo (img_no, img, title, comment, user_id) VALUES (?, ?, ?, ?, ?);',
+        [max_img_no+1, image , title, comment, userid]);
+        if(Array.isArray(selectedTags))
+        {
+          selectedTags.forEach(element => {
+            console.log(element);
+            con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
+            [max_img_no+1, element]);
+          });
+        }else{
+          console.log(selectedTags);
+          con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
+            [max_img_no+1, selectedTags]);
+        }
+        con.release();
       }
       console.log('Insert success');
       res.status(500).redirect('/photos.ejs');
@@ -389,30 +408,36 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
   }
 });
 
-app.post('/delete', async(req,res)=>{
-      let deletecount=req.body.index;
+app.post('/delete', async (req, res) => {
+  try {
+    if (req.session.users) {
       const con = await pool.promise().getConnection();
-      if(req.session.user)
-      {
-        con.query('select * from photo.photo;',
-        [],
-        (err,rows)=>{
-          con.release();
-          if(err){
-            console.log('sql run err');
-            console.dir(err);
-            res.status('500').redirect('/main.ejs');
-            res.end();
-          }
-          
-        });
-      }
-      else{
-        console.log('login err');
-        res.status(500).send('서버 오류');
-      }
+      const [rows] = await con.query('SELECT * FROM photo.photo WHERE user_id=?;', 
+      [req.session.users.id]);
+      con.release();
       
-})
+      if (rows.length > 0) {
+        const photo_no = rows[req.body.index].img_no;
+        console.log('delete');
+        console.log(photo_no);
+
+        await con.query('DELETE FROM photo.tag WHERE img_no=?;', [photo_no]);
+        await con.query('DELETE FROM photo.photo WHERE img_no=?;', [photo_no]);
+
+        res.status(200).redirect("/mypictures.ejs");
+      } else {
+        console.log('데이터가 없습니다.');
+        res.status(404).send('데이터가 없습니다.');
+      }
+    } else {
+      console.log(`로그인하세요`);
+      res.redirect('/login.ejs');
+    }
+  } catch (err) {
+    console.error('에러 발생:', err);
+    res.status(500).redirect('/main.ejs');
+  }
+});
 
 //서버 시작
 app.listen(port, function(err){
