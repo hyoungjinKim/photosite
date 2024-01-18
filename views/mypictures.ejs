@@ -59,7 +59,13 @@
                     </div>
                     <div>
                       <p>
-                      <div><button>수정</button></div><p>
+                      <div>
+                        <form method="post" action="/formal">
+                          <input type="hidden" name="index" value="<%= photo.length-1-i %>">
+                          <button type="submit">수정</button>
+                        </form>
+                      </div>
+                      <p>
                       <div>
                         <form method="post" action="/delete">
                           <input type="hidden" name="index" value="<%= photo.length-1-i %>">

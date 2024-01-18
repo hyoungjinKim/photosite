@@ -11,41 +11,80 @@
 <body>
     <%- include('header.ejs') %>
     <hr class="split">
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <div class="container">
-            <div class="left">
-                <div class="upload_wrap">
-                    <div class="upload">Photo upload</div>
-                    <div><input type="file" onchange="readURL(this)" name="photo"></div>
+    <% if(formal==1) { %>
+        <form action="/format_upload" method="post" enctype="multipart/form-data">
+            <div class="container">
+                <div class="left">
+                    <div class="upload_wrap">
+                        <div class="upload">Photo upload</div>
+                        <div><input type="file" onchange="readURL(this)" name="photo"></div>
+                    </div>
+                    <div class="upload_wrap">
+                        <div class="upload">Title</div>
+                        <div><input class="text" name="title" value="<%= photo_info.title %>"></div>
+                    </div>
+                    <div class="upload_wrap">
+                        <div class="upload">Photo upload</div>
+                        <div><input class="text" name="comment" value="<%= photo_info.comment %>"></div>
+                    </div>
+                    <div class="upload_wrap">
+                        <img class="preview" id="preview">
+                    </div>
                 </div>
-                <div class="upload_wrap">
-                    <div class="upload">Title</div>
-                    <div><input class="text" name="title"></div>
-                </div>
-                <div class="upload_wrap">
-                    <div class="upload">Photo upload</div>
-                    <div><input class="text" name="comment"></div>
-                </div>
-                <div class="upload_wrap">
-                    <img class="preview" id="preview">
+                <div class="right">
+                    <div class="tag_title">Tag select</div>
+                    <div class="overlap">(중복 체크 가능)</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="human" >Human</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="baby">Baby</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="animal">Animal</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="nature">Nature</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Universe">Universe</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="city">City</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="place">Place</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="building">Building</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="food">Food</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="other">Other</div>
+                    <button type="submit" class="submit">submit</button>
                 </div>
             </div>
-            <div class="right">
-                <div class="tag_title">Tag select</div>
-                <div class="overlap">(중복 체크 가능)</div>
-                <div><input class="tag" type="checkbox" name="tags" value="human">Human</div>
-                <div><input class="tag" type="checkbox" name="tags" value="baby">Baby</div>
-                <div><input class="tag" type="checkbox" name="tags" value="animal">Animal</div>
-                <div><input class="tag" type="checkbox" name="tags" value="nature">Nature</div>
-                <div><input class="tag" type="checkbox" name="tags" value="Universe">Universe</div>
-                <div><input class="tag" type="checkbox" name="tags" value="city">City</div>
-                <div><input class="tag" type="checkbox" name="tags" value="place">Place</div>
-                <div><input class="tag" type="checkbox" name="tags" value="building">Building</div>
-                <div><input class="tag" type="checkbox" name="tags" value="food">Food</div>
-                <div><input class="tag" type="checkbox" name="tags" value="other">Other</div>
-                <button type="submit" class="submit">submit</button>
+        </form>
+    <% } else{ %>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="container">
+                <div class="left">
+                    <div class="upload_wrap">
+                        <div class="upload">Photo upload</div>
+                        <div><input type="file" onchange="readURL(this)" name="photo"></div>
+                    </div>
+                    <div class="upload_wrap">
+                        <div class="upload">Title</div>
+                        <div><input class="text" name="title"></div>
+                    </div>
+                    <div class="upload_wrap">
+                        <div class="upload">Photo upload</div>
+                        <div><input class="text" name="comment"></div>
+                    </div>
+                    <div class="upload_wrap">
+                        <img class="preview" id="preview">
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="tag_title">Tag select</div>
+                    <div class="overlap">(중복 체크 가능)</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="human">Human</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="baby">Baby</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="animal">Animal</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="nature">Nature</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Universe">Universe</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="city">City</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="place">Place</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="building">Building</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="food">Food</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="other">Other</div>
+                    <button type="submit" class="submit">submit</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+        <% } %>
 </body>
 </html>

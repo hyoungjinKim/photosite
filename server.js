@@ -16,7 +16,7 @@ const storage=multer.diskStorage({
   destination: function(req,file,cd){
     cd(null,"./public/images/");
   },
-  filename: function(file,cd){
+  filename: function(req,file,cd){
     const ext=path.extname(file.originalname);
     cd(null, path.basename(file.originalname,ext)+"-"+Date.now()+ext);
   },
@@ -75,6 +75,7 @@ const setHeaderData = (req, res, next) => {
 
 app.use(setHeaderData);
 
+//index페이지
 app.get('/', async(req, res) => {
   await pool.getConnection((err,con)=>{
     if(err){
@@ -101,26 +102,32 @@ app.get('/', async(req, res) => {
   })
 });
 
+//login페이지
 app.get('/login.ejs', (req, res) => {
   res.render("login.ejs");
 });
 
+//회원가입페이지
 app.get('/membership.ejs', (req, res) => {
   res.render("membership.ejs");
 });
 
+//loginerr페이지
 app.get('/loginerr.ejs', (req, res) => {
   res.render("loginerr.ejs");
 });
 
+//스크랩페이지
 app.get('/scrap.ejs', (req, res) => {
   res.render("scrap.ejs");
 });
 
+//검색페이지
 app.get('/search.ejs', (req, res) => {
   res.render("search.ejs");
 });
 
+//사진 페이지
 app.get('/photos.ejs', async (req, res) => {
   await pool.getConnection((err,con)=>{
     if(err){
@@ -151,6 +158,7 @@ app.get('/photos.ejs', async (req, res) => {
     })
 });
 
+//내가 업로드한 사진
 app.get('/mypictures.ejs', async (req, res) => {
   if (req.session.users) {
     await pool.getConnection((err, con) => {
@@ -184,6 +192,7 @@ app.get('/mypictures.ejs', async (req, res) => {
 });
 
 
+//index페이지
 app.get('/main.ejs', async(req, res) => {
   await pool.getConnection((err,con)=>{
     if(err){
@@ -210,8 +219,11 @@ app.get('/main.ejs', async(req, res) => {
   })
 });
 
+//사진 업로드
 app.get('/photoupload.ejs', (req, res) => {
-  res.render("photoupload.ejs");
+  res.render("photoupload.ejs",{
+    formal:'0'
+  });
 });
 
 //회원가입
@@ -350,6 +362,7 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
   const selectedTags = req.body.tags || [];
   try {
     if (req.session.users) {
+      const userid=  req.session.users.id;
       const con = await pool.promise().getConnection();
       console.log('Connected to database');
       
@@ -357,12 +370,15 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
       const countResults = await con.query('SELECT COUNT(*) AS count FROM photo;');
       con.release();
       const count = countResults[0][0].count;
-      const [rows] = await con.query('SELECT * FROM photo.photo;');
-      con.release();
-      const max_img_no = rows[rows.length-1].img_no;
-      console.log(max_img_no);
-    
-      const userid=  req.session.users.id;
+      console.log(count);
+     
+      if(count>0){
+        const [rows] = await con.query('SELECT * FROM photo.photo;');
+        con.release();
+        const max_img_no = rows[rows.length-1].img_no;
+        req.session.max_img_no=max_img_no;
+        console.log(max_img_no);
+      }
       // 이미지 삽입
       if(count==0){
         await con.query('INSERT INTO photo (img_no, img, title, comment, user_id) VALUES (?, ?, ?, ?, ?);',
@@ -383,18 +399,18 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
         con.release();
       }else{
         await con.query('INSERT INTO photo (img_no, img, title, comment, user_id) VALUES (?, ?, ?, ?, ?);',
-        [max_img_no+1, image , title, comment, userid]);
+        [req.session.max_img_no+1, image , title, comment, userid]);
         if(Array.isArray(selectedTags))
         {
           selectedTags.forEach(element => {
             console.log(element);
             con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
-            [max_img_no+1, element]);
+            [req.session.max_img_no+1, element]);
           });
         }else{
           console.log(selectedTags);
           con.query('INSERT INTO tag (img_no, tag) VALUES (?, ?);',
-            [max_img_no+1, selectedTags]);
+            [req.session.max_img_no+1, selectedTags]);
         }
         con.release();
       }
@@ -407,6 +423,7 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
   }
 });
 
+//사진 삭제
 app.post('/delete', async (req, res) => {
   try {
     if (req.session.users) {
@@ -415,13 +432,28 @@ app.post('/delete', async (req, res) => {
       [req.session.users.id]);
       con.release();
       
+
       if (rows.length > 0) {
         const photo_no = rows[req.body.index].img_no;
         console.log('delete');
         console.log(photo_no);
 
+        const rows1 = await con.query('SELECT * FROM photo.photo WHERE img_no=?;', [photo_no]);
+        con.release();
+        const filePath=`./public${rows1[0][0].img}`;
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error('파일 삭제 중 에러 발생:', err);
+            return;
+          }
+          console.log('파일이 성공적으로 삭제되었습니다.');
+        });
+
         await con.query('DELETE FROM photo.tag WHERE img_no=?;', [photo_no]);
+        con.release();
+
         await con.query('DELETE FROM photo.photo WHERE img_no=?;', [photo_no]);
+        con.release();
 
         res.status(200).redirect("/mypictures.ejs");
       } else {
@@ -430,11 +462,105 @@ app.post('/delete', async (req, res) => {
       }
     } else {
       console.log(`로그인하세요`);
-      res.redirect('/login.ejs');
+      res.redirect('/login.ejs').end();
     }
   } catch (err) {
     console.error('에러 발생:', err);
     res.status(500).redirect('/main.ejs');
+  }
+});
+
+//사진 수정
+app.post('/formal', async(req,res)=>{
+  try { 
+    if (req.session.users) {
+      console.log('test');
+      const con = await pool.promise().getConnection();
+      const [rows] = await con.query('SELECT * FROM photo.photo WHERE user_id=?;', 
+      [req.session.users.id]);
+      con.release();
+      if (rows.length > 0) {
+        
+        const photo_no = rows[req.body.index].img_no;
+        req.session.img_no=photo_no;
+        const rows_photo = await con.query('SELECT * FROM photo.photo WHERE img_no=?;', [photo_no]);
+        const rows_tag =await con.query('SELECT * FROM photo.tag WHERE img_no=?;', [photo_no]);
+        con.release();
+        console.log(rows_photo[0][0]);
+        console.log(rows_tag[0][0]);
+        console.log()
+        res.status(200).render('photoupload.ejs',{
+          formal:'1',
+          photo_info:rows_photo[0][0],
+          photo_tag:rows_tag[0][0].tag
+        });
+      }
+    }else {
+      console.log(`로그인하세요`);
+      res.status(500).redirect('/login.ejs');
+    }
+  } catch (err) {
+    console.error('에러 발생:', err);
+    res.status(500).send('서버 에러');
+  }
+});
+
+//사진 수정 업로드
+app.post('/format_upload', upload.single('photo'), async(req,res)=>{
+  try {
+    if(req.session.users){
+      const title=req.body.title;
+      const comment=req.body.comment;
+      const image=`/images/${req.file.filename}`;
+      const selectedTags = req.body.tags || [];
+      const con = await pool.promise().getConnection();
+
+      const rows1 = await con.query('SELECT * FROM photo.photo WHERE img_no=?;', [req.session.img_no]);
+        con.release();
+        const filePath=`./public${rows1[0][0].img}`;
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error('파일 삭제 중 에러 발생:', err);
+            return;
+          }
+          console.log('파일이 성공적으로 삭제되었습니다.');
+        });
+
+        await con.query('UPDATE photo.photo SET img=?, title=?, comment=? WHERE img_no=?;', 
+        [image, title, comment, req.session.img_no]);
+      
+      con.release();
+      
+      if(Array.isArray(selectedTags))
+        {
+          selectedTags.forEach(element => {
+            console.log(element);
+            con.query('update photo.tag set tag=? where img_no=?;',
+            [element, req.session.img_no]);
+          });
+        }else{
+          console.log(selectedTags);
+          con.query('update photo.tag set tag=? where img_no=?;',
+            [selectedTags, req.session.img_no]);
+        }
+        res.status(200).redirect('/photos.ejs');
+    }else{
+      console.log(`로그인하세요`);
+      res.status(500).redirect('/login.ejs');
+    }
+    
+  }catch(err){
+    console.error('에러 발생:', err);
+    res.status(500).send('서버 에러');
+  }
+});
+
+app.post('/search', async(req,res)=>{
+  try{
+    
+  }catch(err){
+    console.error('에러 발생:', err);
+    res.status(500).send('서버 에러');
   }
 });
 
