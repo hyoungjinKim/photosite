@@ -4,6 +4,8 @@ package-lock.json/
 
 package.json/
 
-config/
+config/*
+!config/*/
 
-/public/images/
+images/
+!images/.gitkeep
