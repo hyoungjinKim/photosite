@@ -8,11 +8,13 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
-    "mysql2": "^3.7.0",
+    "mysql2": "^3.7.1",
     "nodemon": "^3.0.2",
     "path": "^0.12.7",
     "pm2": "^5.3.0",
     "redis": "^4.6.11",
+    "serve-static": "^1.15.0",
+    "server-static": "^2.0.5",
     "session-file-store": "^1.5.0"
   }
 }

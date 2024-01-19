@@ -555,10 +555,65 @@ app.post('/format_upload', upload.single('photo'), async(req,res)=>{
   }
 });
 
-app.post('/search', async(req,res)=>{
-  try{
+
+//검색
+app.post('/search', async (req, res) => {
+  try {
+    const selectedTags = req.body.tags || [];
+    const search = req.body.search;
+    const con = await pool.promise().getConnection();
+
+    let search_tag;
+    if (Array.isArray(selectedTags) && selectedTags.length > 0) {
+      const promises = selectedTags.map(async (element) => {
+        try {
+          const [tagResult] = await con.query('SELECT * FROM photo.tag WHERE tag=?;', [element]);
+          return tagResult;
+        } catch (error) {
+          console.error('에러 발생:', error);
+          return [];
+        }
+      });
+
+      // 모든 Promise가 완료될 때까지 기다림
+      search_tag = await Promise.all(promises);
+    } else if (typeof selectedTags === 'string' && selectedTags.length > 0) {
+      try {
+        const [tagResult] = await con.query('SELECT * FROM photo.tag WHERE tag=?;', [selectedTags]);
+        search_tag = [tagResult];
+      } catch (error) {
+        console.error('에러 발생:', error);
+        search_tag = [];
+      }
+    } else {
+      search_tag = [];
+    }
+
+    // 검색된 이미지 번호를 배열로 추출
+    const imgNos = search_tag.reduce((acc, tagResult) => {
+      if (tagResult.length > 0) {
+        // 여러 개의 값 모두를 배열에 추가
+        acc = acc.concat(tagResult.map(item => item.img_no));
+      }
+      return acc;
+    }, []);
     
-  }catch(err){
+    let search_title;
+    if (imgNos.length > 0) {
+      // 이미지 번호가 있는 경우
+      search_title = await con.query('SELECT * FROM photo.photo WHERE img_no IN (?) AND title LIKE ?',
+        [imgNos, `%${search}%`]);
+    } else {
+      // 이미지 번호가 없는 경우 또는 태그가 선택되지 않은 경우
+      search_title = await con.query('SELECT * FROM photo.photo WHERE title LIKE ?',
+        [`%${search}%`]);
+    }
+    con.release();
+    console.log(search_title[0]);
+    res.status(200).render('search.ejs', {
+      photo: search_title[0]
+    });
+  } catch (err) {
     console.error('에러 발생:', err);
     res.status(500).send('서버 에러');
   }
@@ -566,6 +621,6 @@ app.post('/search', async(req,res)=>{
 
 //서버 시작
 app.listen(port, function(err){
-    if(err) return console.log(err);
-    console.log(`open server listen on port:${port}`);
+  if(err) return console.log(err);
+  console.log(`open server listen on port:${port}`);
 });

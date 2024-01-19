@@ -11,36 +11,38 @@
 <body>
     <%- include('header.ejs') %>
     <hr class="split">
-    <div class="container">
-        <span class="menu_wrap">
-            <input type="checkbox" class="menu" id="menuicon">
-            <label for="menuicon">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
-            <div class="sidebar">
-                <div class="tag_title">Tag</div>
-                <div><input class="tag" type="checkbox" value="Human" name="tag" onclick="tag(this)">Human</div>
-                <div><input class="tag" type="checkbox" value="Baby" name="tag" onclick="tag(this)">Baby</div>
-                <div><input class="tag" type="checkbox" value="Animal" name="tag" onclick="tag(this)">Animal</div>
-                <div><input class="tag" type="checkbox" value="Nature" name="tag" onclick="tag(this)">Nature</div>
-                <div><input class="tag" type="checkbox" value="Universe" name="tag" onclick="tag(this)">Universe</div>
-                <div><input class="tag" type="checkbox" value="City" name="tag" onclick="tag(this)">City</div>
-                <div><input class="tag" type="checkbox" value="Place" name="tag" onclick="tag(this)">Place</div>
-                <div><input class="tag" type="checkbox" value="Building" name="tag" onclick="tag(this)">Building</div>
-                <div><input class="tag" type="checkbox" value="Food"  name="tag" onclick="tag(this)">Food</div>
-                <div><input class="tag" type="checkbox" value="Other" name="tag" onclick="tag(this)" >Other</div>
-            </div>
-        </span>
-        <span class="search_wrap">
-            <div class="search">
-                <input class="search_input" type="text" placeholder="search">
-                <a href=""><img class="search_img" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
-            </div>
-        </span>
-        <span></span>
-    </div>
+    <form method="post" action="/search">
+        <div class="container">
+            <span class="menu_wrap">
+                <input type="checkbox" class="menu" id="menuicon">
+                <label for="menuicon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+                <div class="sidebar">
+                    <div class="tag_title">Tag</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Human" onclick="tag(this)">Human</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Baby" onclick="tag(this)">Baby</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Animal" onclick="tag(this)">Animal</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Nature" onclick="tag(this)">Nature</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Universe" onclick="tag(this)">Universe</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="City" onclick="tag(this)">City</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Place" onclick="tag(this)">Place</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Building" onclick="tag(this)">Building</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Food" onclick="tag(this)">Food</div>
+                    <div><input class="tag" type="checkbox" name="tags" value="Other" onclick="tag(this)" >Other</div>
+                </div>
+            </span>
+            <span class="search_wrap">
+                <div class="search">
+                    <input class="search_input" type="text" placeholder="search" name="search">
+                    <a href="search.ejs"><button type="submit"><img class="search_img" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></button></a>
+                </div>
+            </span>
+            <span></span>
+        </div>
+      </form>
     <div class="tag_wrap" id="tag_wrap"></div>
     
     <div class="sorting_wrap">
@@ -52,48 +54,22 @@
     </div>
     
     <table>
+    <% if (photo && photo.length > 0) { %>
+        <% for (let i = 0; i < photo.length; i += 4) { %>
         <tr>
-            <td><a href="photos.ejs"><img class="picture" src="pictures/cute1.jpg"></a><div class="title">cute</div></td>
-            <td><a href="photos.ejs"><img class="picture" src="pictures/cute2.jpg"></a><div class="title">cute</div></td>
-            <td><a href="photos.ejs"><img class="picture" src="pictures/cute3.jpg"></a><div class="title">cute</div></td>
-            <td><a href="photos.ejs"><img class="picture" src="pictures/cute4.jpg"></a><div class="title">cute</div></td>
+            <% for (let j = i; j < i + 4 && j < photo.length; j++) { %>
+            <td class="picture_wrap">
+                <a href="photos.ejs"><img class="picture" src="<%= photo[photo.length-1-j].img%>"></a>
+                <div class="title"><%= photo[photo.length-1-j].title %></div>
+            </td>
+            <% } %>
         </tr>
+    <% } %>
+    <% } else { %>
         <tr>
-            <td><a href=""><img class="picture" src="pictures/cute1.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute2.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute3.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute4.jpg"></a><div class="title">cute</div></td>
+            <td colspan="4">No data available</td>
         </tr>
-        <tr>
-            <td><a href=""><img class="picture" src="pictures/cute1.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute2.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute3.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute4.jpg"></a><div class="title">cute</div></td>
-        </tr>
-        <tr>
-            <td><a href=""><img class="picture" src="pictures/cute1.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute2.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute3.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute4.jpg"></a><div class="title">cute</div></td>
-        </tr>
-        <tr>
-            <td><a href=""><img class="picture" src="pictures/cute1.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute2.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute3.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute4.jpg"></a><div class="title">cute</div></td>
-        </tr>
-        <tr>
-            <td><a href=""><img class="picture" src="pictures/cute1.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute2.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute3.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute4.jpg"></a><div class="title">cute</div></td>
-        </tr>
-        <tr>
-            <td><a href=""><img class="picture" src="pictures/cute1.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute2.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute3.jpg"></a><div class="title">cute</div></td>
-            <td><a href=""><img class="picture" src="pictures/cute4.jpg"></a><div class="title">cute</div></td>
-        </tr>
+    <% } %>
     </table>
 </body>
 </html>
