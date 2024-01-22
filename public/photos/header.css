@@ -1,0 +1,34 @@
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main_btn{
+    font-size: 300%;
+    margin-left: 3%;
+}
+
+.left_wrap{
+    margin-right: 3%;
+}
+
+.split{
+    border: 3px solid black;
+    width: 100%;
+    margin-bottom: 0;
+   
+}

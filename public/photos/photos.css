@@ -67,18 +67,27 @@
 
 .buttton_wrap{
     display: flex;
+    flex-direction: row;
     justify-content: center;
     width: 100%;
 }
 
-.buttton_wrap button{
+.button{
     font-size: 25px;
     margin-left: 2%;
     border: 1px solid black;
     border-radius: 20px;
     padding: 0.5%;
+    padding: 10%;
 }
 
+.button_recom{
+    margin-right: 100%;
+}
+
+.button_scrap{
+    margin-left: 100%;
+}
 .comment_wrap{
     margin-left: 1%;
     margin-top: 1%;
@@ -101,10 +110,13 @@
 }
 
 
-
 .write_wrap{
     display: flex;
     justify-content: center;
+}
+
+.form{
+    width: 60%;
 }
 
 .reply_input{
@@ -113,17 +125,17 @@
 }
 
 .write{
-    width: 80%;
+    width: 70%;
     height: 80px;
     font-size: 120%;
-    resize: none;
+    border-radius: 10px;
 }
 
 .submit{
-    width: 3%;
     height: 40%;
     font-size: 120%;
     border: 1px solid black;
     margin-left: 1%;
     margin-top: 60px;
+    border-radius: 20px;
 }

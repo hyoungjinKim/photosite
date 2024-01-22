@@ -44,6 +44,11 @@
       </div>
     </form>
     <div>
+      <% if(sort[3].Recommendation != null){%>
+        <% for(let i = 0; i < 4 && i < sort.length; i++){ %>
+          <img class="main_photo" src="<%=sort[i].img%>">
+        <%}%>
+      <%}else{%>
         <% if (photo && photo.length > 3) { %>
             <% for(let i = 0; i < 4 && i < photo.length; i++){ %>
                 <img class="main_photo" src="<%=photo[i].img%>">
@@ -51,20 +56,30 @@
         <% } else { %>
              <img class="main_photo" src="pictures/cute2.jpg">
         <% } %>
+      <%}%>
     </div>
     <div class="center_title best">Best Picture</div>
     <table>
-    <% if (photo && photo.length > 0) { %>
+      <% if(sort[3].Recommendation != null){%>
         <tr>
-            <% for(let i = 0; i < 4 && i < photo.length; i++){ %>
-                <td class="picture_wrap"><a href="photos.ejs"><img class="picture" src="<%=photo[i].img%>"></a><div class="title"><%=photo[i].title%></div></td>
-            <% } %>
+          <% for(let i = 0; i < 4 && i < sort.length; i++){ %>
+              <td class="picture_wrap"><a href="/photos/<%=sort[i].img_no%>"><img class="picture" src="<%=sort[i].img%>"></a><div class="title"><%=sort[i].title%></div></td>
+          <% } %>
         </tr>
-    <% } else { %>
-        <tr>
+      <%}else{%>
+        <% if (photo && photo.length > 0) { %>
+          <tr>
+            <% for(let i = 0; i < 4 && i < photo.length; i++){ %>
+                <td class="picture_wrap"><a href="/photos/<%=photo[i].img_no%>"><img class="picture" src="<%=photo[i].img%>"></a><div class="title"><%=photo[i].title%></div></td>
+            <% } %>
+          </tr>
+       <% } else { %>
+          <tr>
             <td colspan="4">No data available</td>
           </tr>
-    <% } %>
+        <% } %>
+      <%}%>
+    
     </table>
     <div class="center_title">Recent picture</div>
     <table>
@@ -73,7 +88,7 @@
               <tr>
                 <% for (let j = i; j < i + 4 && j < photo.length; j++) { %>
                   <td class="picture_wrap">
-                    <a href="photos.ejs">
+                    <a href="/photos/<%=photo[photo.length-1-j].img_no%>">
                       <img class="picture" src="<%= photo[photo.length-1-j].img %>">
                     </a>
                     <div class="title"><%= photo[photo.length-1-j].title %></div>

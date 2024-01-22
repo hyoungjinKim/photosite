@@ -44,7 +44,6 @@
         </div>
       </form>
     <div class="tag_wrap" id="tag_wrap"></div>
-    
     <div class="sorting_wrap">
         <label for="sorting">정렬:</label>
         <select name="sorting" id="sorting">
@@ -59,7 +58,7 @@
         <tr>
             <% for (let j = i; j < i + 4 && j < photo.length; j++) { %>
             <td class="picture_wrap">
-                <a href="photos.ejs"><img class="picture" src="<%= photo[photo.length-1-j].img%>"></a>
+                <a href="/photos/<%=photo[photo.length-1-j].img_no%>"><img class="picture" src="<%= photo[photo.length-1-j].img%>"></a>
                 <div class="title"><%= photo[photo.length-1-j].title %></div>
             </td>
             <% } %>

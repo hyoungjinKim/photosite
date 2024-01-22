@@ -14,9 +14,9 @@
     <div class="container">
         <div class="sidebar">
             <div>
-                <div class="Interval"><button class="menu select"><a href="mypictures.ejs">My Pictures</a></button></div>
+                <div class="Interval"><button class="menu select"><a href="/mypictures.ejs">My Pictures</a></button></div>
                 <div class="Interval1"><button class="menu"><a href="scrap.ejs">interesting picture</a></button></div>
-                <div class="Interval2"><button class="menu"><a href="photoupload.ejs">picture upload</a></button></div>
+                <div class="Interval2"><button class="menu"><a href="/photoupload.ejs">picture upload</a></button></div>
             </div>
         </div>
         <div class="main">
@@ -45,18 +45,20 @@
             <% if (photo && photo.length > 0) { %>
               <% for (let i = 0; i < photo.length; i++) { %>
                   <div class="space">
-                    <div class="left">
-                      <div class="img_wrap"><img class="my_img" src="<%= photo[photo.length-1-i].img %>"></div>
-                      <div class="my_photo">
-                        <div>
-                          <span>Title: </span><span class="title"><%= photo[photo.length-1-i].title %></span>
-                        </div>
-                        <p>
-                        <div>
-                          <div>Comment: </div><div class="comment"><%= photo[photo.length-1-i].comment %></div>
+                    <a href="/photos/<%=photo[photo.length-1-i].img_no %>">
+                      <div class="left">
+                        <div class="img_wrap"><img class="my_img" src="<%= photo[photo.length-1-i].img %>"></div>
+                        <div class="my_photo">
+                          <div>
+                            <span>Title: </span><span class="title"><%= photo[photo.length-1-i].title %></span>
+                          </div>
+                          <p>
+                          <div>
+                            <div>Comment: </div><div class="comment"><%= photo[photo.length-1-i].comment %></div>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </a>
                     <div>
                       <p>
                       <div>

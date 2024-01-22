@@ -4,47 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pictures</title>
-    <link rel="stylesheet" href="header/header.css">
-    <link rel="stylesheet" href="photos/photos.css">
-    <script defer src="photos/photos.js"></script>
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="photos.css">
+    <script defer src="photos.js"></script>
 </head>
 <body>
     <%- include('header.ejs') %>
     <hr class="split">
-    <div class="title_wrap"><span>Title: </span><span class="title"><%=title%></span><span class="date">(username)</span></div>
+    <div class="title_wrap"><span>Title: </span><span class="title"><%=img.title%></span><span class="date">(<%=user.nickname%>)</span></div>
     <div class="container">
-        <div class="left"><img class="img" src="pictures/cute2.jpg"></div>
+        <div class="left"><img class="img" src="<%=img.img%>"></div>
         <div class="right">
             <div>
                 <button>Download</button>
             </div>
-            <div>
-                tag
-            </div>
-            <div>
-                tag
-            </div>
-            <div>
-                tag
-            </div>
+            <% if (tag && tag.length > 0) { %>
+                <% tag.forEach((tagItem) => { %>
+                  <div>
+                    <%= tagItem.tag %>
+                  </div>
+                <% }); %>
+              <% } %>
         </div>
     </div>
     <div class="explanation_wrap">
         <div class="explanation_title">comment</div>
-        <div class="explanation"><%=comment%></div>
+        <div class="explanation"><%=img.comment%></div>
     </div>
     <div class="buttton_wrap">
-        <button><img>recommend</button>
-        <button>추천</button>
+        <form method="post" action="/recommend">
+            <input type="hidden" name="index" value="<%=img.img_no%>">
+            <button class="button button_recom" type="submit">
+                추천:
+                <% if(img.Recommendation==null){%>
+                    <%= 0 %>
+                <%}else{%>
+                    <%=img.Recommendation%>
+                <%}%>
+            </button>
+        </form>
+        <form method="post" action="/scrap">
+            <input type="hidden" name="index" value="<%=img.img_no%>">
+            <button class="button button_scrap" type="submit">스크랩</button>
+        </form>
     </div>
     <hr class="split">
     <div id="commentpart">
-        
+        댓글이 없습니다.
     </div>
     <hr>
     <div class="write_wrap">
-        <input class="write" id="comment_input" placeholder="Write a comment">
-        <button class="submit" onclick="Commentsubmit()">submit</button>
+        <form method="post" action="/comment" class="form">
+            <input class="write" id="comment_input" placeholder="Write a comment" name="comment">
+            <input type="hidden" name="index2" value="<%=img.img_no%>">
+            <button class="submit" type="submit">submit</button>
+        </form>
     </div>
 </body>
 </html>
