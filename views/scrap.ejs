@@ -42,150 +42,29 @@
                     </div>
                 </div>
             </div>
-            <div class="space">
-                <div class="left">
-                    <div class="img_wrap"><img class="my_img" src="pictures/cute1.jpg"></div>
-                    <div class="my_photo">
-                        <div>
-                            <span>Title: </span><span class="title">cute</span>
+            <% if(scrap.length>0){%>
+                <% for(let i=0; i<scrap.length; i++){%>
+                    <div class="space">
+                        <div class="left">
+                            <div class="img_wrap"><img class="my_img" src="<%=scrap[i]."></div>
+                            <div class="my_photo">
+                                <div>
+                                    <span>Title: </span><span class="title">cute</span>
+                                </div>
+                                <p>
+                                <div>
+                                    <div>Comment: </div><div class="comment">(comment)</div>
+                                </div>
+                            </div>
                         </div>
-                        <p>
                         <div>
-                            <div>Comment: </div><div class="comment">(comment)</div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <p>
-                    <div><button class="down">Download</button></div>
-                </div>
-            </div>
-            <div class="space">
-                <div class="left">
-                    <div class="img_wrap"><img class="my_img" src="pictures/cute3.jpg"></div>
-                    <div class="my_photo">
-                        <div>
-                            <span>Title: </span><span class="title">cute</span>
-                        </div>
-                        <p>
-                        <div>
-                            <div>Comment: </div><div class="comment">(comment)</div>
+                            <p>
+                            <div><button class="down">Download</button></div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <p>
-                    <div><button class="down">Download</button></div>
-                </div>
-            </div>
-            <div class="space">
-                <div class="left">
-                    <div class="img_wrap"><img class="my_img" src="pictures/cute4.jpg"></div>
-                    <div class="my_photo">
-                        <div>
-                            <span>Title: </span><span class="title">cute</span>
-                        </div>
-                        <p>
-                        <div>
-                            <div>Comment: </div><div class="comment">(comment)</div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <p>
-                    <div><button class="down">Download</button></div>
-                </div>
-            </div>
-            <div class="space">
-                <div class="left">
-                    <div class="img_wrap"><img class="my_img" src="pictures/cute1.jpg"></div>
-                    <div class="my_photo">
-                        <div>
-                            <span>Title: </span><span class="title">cute</span>
-                        </div>
-                        <p>
-                        <div>
-                            <div>Comment: </div><div class="comment">(comment)</div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <p>
-                    <div><button class="down">Download</button></div>
-                </div>
-            </div>
-            <div class="space">
-                <div class="left">
-                    <div class="img_wrap"><img class="my_img" src="pictures/cute2.jpg"></div>
-                    <div class="my_photo">
-                        <div>
-                            <span>Title: </span><span class="title">cute</span>
-                        </div>
-                        <p>
-                        <div>
-                            <div>Comment: </div><div class="comment">(comment)</div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <p>
-                    <div><button class="down">Download</button></div>
-                </div>
-            </div>
-            <div class="space">
-                <div class="left">
-                    <div class="img_wrap"><img class="my_img" src="pictures/cute3.jpg"></div>
-                    <div class="my_photo">
-                        <div>
-                            <span>Title: </span><span class="title">cute</span>
-                        </div>
-                        <p>
-                        <div>
-                            <div>Comment: </div><div class="comment">(comment)</div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <p>
-                    <div><button class="down">Download</button></div>
-                </div>
-            </div>
-            <div class="space">
-                <div class="left">
-                    <div class="img_wrap"><img class="my_img" src="pictures/cute4.jpg"></div>
-                    <div class="my_photo">
-                        <div>
-                            <span>Title: </span><span class="title">cute</span>
-                        </div>
-                        <p>
-                        <div>
-                            <div>Comment: </div><div class="comment">(comment)</div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <p>
-                    <div><button class="down">Download</button></div>
-                </div>
-            </div>
-            <div class="space">
-                <div class="left">
-                    <div class="img_wrap"><img class="my_img" src="pictures/cute1.jpg"></div>
-                    <div class="my_photo">
-                        <div>
-                            <span>Title: </span><span class="title">cute</span>
-                        </div>
-                        <p>
-                        <div>
-                            <div>Comment: </div><div class="comment">(comment)</div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <p>
-                    <div><button class="down">Download</button></div>
-                </div>
-            </div>
+                <%}%>
+            <%}else{%>
+            <%}%>
         </div>
     </div>
 </body>

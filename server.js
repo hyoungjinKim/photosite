@@ -123,20 +123,22 @@ app.get('/scrap.ejs', async(req, res) => {
   try{
     if(req.session.users){
       const con = await pool.promise().getConnection();
-      const [img] =con.query('select * from photo.scrap where user_id=?;',
-      [req.session.users.id],
-      (err)=>{
+      const id=req.session.users.id;
+      con.query("SELECT * FROM photo.scrap where user_id = ?;",
+      [id],
+      (err, img)=>{
         if(err){
           console.error('태그 쿼리 오류:', err);
-          res.status(500).send('서버 에러'); // 에러 페이지로 리디렉션
+          res.status(500).send('서버 에러');
           con.release();
           return;
         }
-      });
-      console.log(img[0]);
-
-      res.render("scrap.ejs",{
-        scrap:scrap
+        console.log(1);  
+        console.log(img);
+        res.status(200).redirect('/');
+        // render("scrap.ejs",{
+        //   scrap:img
+        // });  
       });
     }else{
       console.log(`로그인하세요`);
@@ -160,20 +162,20 @@ app.get('/photos/:photoId', async (req, res) => {
     pool.getConnection((err, con) => {
       if (err) {
         console.error('연결 오류:', err);
-        res.status(500).send('서버 에러'); // 에러 페이지로 리디렉션
+        res.status(500).send('서버 에러');
         return;
       }
       con.query("SELECT * FROM photo.photo WHERE img_no = ?;", [photoId], (err, img) => {
         if (err) {
           console.error('이미지 쿼리 오류:', err);
-          res.status(500).send('서버 에러'); // 에러 페이지로 리디렉션
+          res.status(500).send('서버 에러');
           connection.release();
           return;
         }
         con.query("SELECT * FROM photo.tag WHERE img_no = ?;", [photoId], (err, tag) => {
           if (err) {
             console.error('태그 쿼리 오류:', err);
-            res.status(500).send('서버 에러'); // 에러 페이지로 리디렉션
+            res.status(500).send('서버 에러');
             con.release();
             return;
           }
@@ -794,7 +796,6 @@ app.post('/comment', async (req, res) => {
     res.status(500).send('서버 에러');
   }
 });
-
 
 //서버 시작
 app.listen(port, function(err){
