@@ -124,22 +124,42 @@ app.get('/scrap.ejs', async(req, res) => {
     if(req.session.users){
       const con = await pool.promise().getConnection();
       const id=req.session.users.id;
-      con.query("SELECT * FROM photo.scrap where user_id = ?;",
+      const [img]= await con.query("SELECT * FROM photo.scrap where user_id = ?;",
       [id],
-      (err, img)=>{
+      (err)=>{
         if(err){
           console.error('태그 쿼리 오류:', err);
           res.status(500).send('서버 에러');
           con.release();
           return;
         }
-        console.log(1);  
-        console.log(img);
-        res.status(200).redirect('/');
-        // render("scrap.ejs",{
-        //   scrap:img
-        // });  
       });
+      console.log(1);
+      const imgnum = [];
+      const photoArray = [];
+
+      async function fetchData() {
+        for (let i = 0; i < img.length; i++) {
+          imgnum.push(img[i].img_no);
+
+          try {
+            const [photo] = await con.query('select * from photo.photo where img_no=?;', [imgnum[i]]);
+
+            photoArray.push(photo);
+          } catch (err) {
+            console.error('태그 쿼리 오류:', err);
+            res.status(500).send('서버 에러');
+            con.release();
+            return;
+          }
+        console.log(photoArray[i][0]);
+        }
+        res.status(200).render('scrap.ejs',{
+          scrap:img,
+          photo:photoArray
+        });
+      }
+      fetchData();
     }else{
       console.log(`로그인하세요`);
       res.status(500).redirect('/login.ejs');
@@ -196,7 +216,6 @@ app.get('/photos/:photoId', async (req, res) => {
               return;
             }
               console.log(comment);
-              const user_id=[]
               
               con.query('SELECT * FROM photo.user where id=?;',
               [comment.user_id],
@@ -716,7 +735,7 @@ app.post('/scrap', async(req,res)=>{
       });
       console.log(row[0]);
       if(row[0] != undefined){
-        con.query('DELETE FROM photo.scrap WHERE user_id=? AND img_no;', 
+        con.query('DELETE FROM photo.scrap WHERE user_id=? AND img_no=?;', 
         [req.session.users.id,imgnum],
         (err)=>{
           if(err){
@@ -775,13 +794,13 @@ app.post('/comment', async (req, res) => {
         const [rows] = await con.query('SELECT * FROM photo.comment;');
         const max_com_no = rows[rows.length - 1].comment_no;
 
-        await con.query('INSERT INTO comment (comment_no, comment, date, img_no, user_id) VALUES (?, ?,?,?,?);',
+        await con.query('INSERT INTO comment (comment_no, comment, date, img_no, user_id) VALUES (?, ?, ?, ?, ?);',
           [max_com_no + 1, comment, now, imgnum2, req.session.users.id]);
         con.release(); 
       }
 
       if (count == 0) {
-        await con.query('INSERT INTO comment (comment_no, comment, date, img_no, user_id) VALUES (?, ?,?,?,?);',
+        await con.query('INSERT INTO comment (comment_no, comment, date, img_no, user_id) VALUES (?, ?, ?, ?, ?);',
           [count + 1, comment, now, imgnum2, req.session.users.id]);
         con.release(); 
       }

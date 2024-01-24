@@ -42,24 +42,24 @@
                     </div>
                 </div>
             </div>
-            <% if(scrap.length>0){%>
-                <% for(let i=0; i<scrap.length; i++){%>
+            <% if(photo.length>0){%>
+                <% for(let i=0; i<photo.length; i++){%>
                     <div class="space">
                         <div class="left">
-                            <div class="img_wrap"><img class="my_img" src="<%=scrap[i]."></div>
+                            <div class="img_wrap"><img class="my_img" src="<%=photo[i][0].img%>"></div>
                             <div class="my_photo">
                                 <div>
-                                    <span>Title: </span><span class="title">cute</span>
+                                    <span>Title: </span><span class="title"><%=photo[i][0].title%></span>
                                 </div>
                                 <p>
                                 <div>
-                                    <div>Comment: </div><div class="comment">(comment)</div>
+                                    <div>Comment: </div><div class="comment"><%=photo[i][0].comment%></div>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <p>
-                            <div><button class="down">Download</button></div>
+                            <div><a href="<%=photo[i][0].img%>" download="<%=photo[i][0].title%>"><button class="down">Download</button></a></div>
                         </div>
                     </div>
                 <%}%>
