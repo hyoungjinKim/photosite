@@ -119,8 +119,33 @@ app.get('/loginerr.ejs', (req, res) => {
 });
 
 //스크랩페이지
-app.get('/scrap.ejs', (req, res) => {
-  res.render("scrap.ejs");
+app.get('/scrap.ejs', async(req, res) => {
+  try{
+    if(req.session.users){
+      const con = await pool.promise().getConnection();
+      const [img] =con.query('select * from photo.scrap where user_id=?;',
+      [req.session.users.id],
+      (err)=>{
+        if(err){
+          console.error('태그 쿼리 오류:', err);
+          res.status(500).send('서버 에러'); // 에러 페이지로 리디렉션
+          con.release();
+          return;
+        }
+      });
+      console.log(img[0]);
+
+      res.render("scrap.ejs",{
+        scrap:scrap
+      });
+    }else{
+      console.log(`로그인하세요`);
+      res.status(500).redirect('/login.ejs');
+    }
+  }catch(err){
+    console.error('에러 발생:', err);
+    res.status(500).send('서버 에러');
+  }
 });
 
 //검색페이지
@@ -155,27 +180,50 @@ app.get('/photos/:photoId', async (req, res) => {
           con.query("SELECT * FROM photo.user WHERE id = ?;", [img[0].user_id], (err, user) => {
             if (err) {
               console.error('사용자 쿼리 오류:', err);
-              res.status(500).send('서버 에러'); // 에러 페이지로 리디렉션
+              res.status(500).send('쿼리 에러');
               con.release();
               return;
             }
-            res.render("photos.ejs", {
-              img: img[0],
-              tag: tag,
-              user: user[0]
+            con.query('select * from photo.comment where img_no=?',
+            [photoId],
+            (err, comment)=>{
+              if(err){
+              console.error('쿼리 오류:', err);
+              res.status(500).send('쿼리 에러');
+              con.release();
+              return;
+            }
+              console.log(comment);
+              const user_id=[]
+              
+              con.query('SELECT * FROM photo.user where id=?;',
+              [comment.user_id],
+              (err, nickname)=>{
+                if(err){
+                  console.error('쿼리 오류:', err);
+                  res.status(500).send('쿼리 에러');
+                  con.release();
+                  return;
+                }
+                console.log(comment.user_id);
+                console.log(nickname);
+                res.render("photos.ejs", {
+                  img: img[0],
+                  tag: tag,
+                  user: user[0],
+                  comment: comment
+              });
+            });  
             });
-            con.release();
           });
         });
       });
     });
   } catch (err) {
     console.error('에러 발생:', err);
-    res.status(500).send('서버 에러'); // 에러 페이지로 리디렉션
+    res.status(500).send('서버 에러');
   }
 });
-
-
 
 //내가 업로드한 사진
 app.get('/mypictures.ejs', async (req, res) => {
@@ -614,7 +662,7 @@ app.post('/recommend',async(req,res)=>{
     const [recom] = await con.query('SELECT * FROM photo.photo WHERE img_no=?;', [imgnum],(err)=>{
       if(err){
         console.error('쿼리 오류:', err);
-        res.status(500).send('서버 에러'); // 에러 페이지로 리디렉션
+        res.status(500).send('서버 에러'); 
         con.release();
         return;
       }
@@ -624,7 +672,7 @@ app.post('/recommend',async(req,res)=>{
     [1,imgnum],(err)=>{
       if(err){
         console.error('쿼리 오류:', err);
-        res.status(500).send('서버 에러'); // 에러 페이지로 리디렉션
+        res.status(500).send('서버 에러');
         con.release();
         return;
       }
@@ -634,7 +682,7 @@ app.post('/recommend',async(req,res)=>{
       [recom[0].Recommendation+1,imgnum],(err)=>{
         if(err){
           console.error('쿼리 오류:', err);
-          res.status(500).send('서버 에러'); // 에러 페이지로 리디렉션
+          res.status(500).send('서버 에러');
           con.release();
           return;
         }
@@ -648,6 +696,7 @@ app.post('/recommend',async(req,res)=>{
   }
 });
 
+//scrap
 app.post('/scrap', async(req,res)=>{
   try{
     if(req.session.users){
@@ -699,6 +748,7 @@ app.post('/scrap', async(req,res)=>{
   }
 })
 
+//댓글
 app.post('/comment', async (req, res) => {
   try {
     if (req.session.users) {
@@ -721,34 +771,20 @@ app.post('/comment', async (req, res) => {
 
       if (count > 0) {
         const [rows] = await con.query('SELECT * FROM photo.comment;');
-        const max_img_no = rows[rows.length - 1].img_no;
+        const max_com_no = rows[rows.length - 1].comment_no;
 
         await con.query('INSERT INTO comment (comment_no, comment, date, img_no, user_id) VALUES (?, ?,?,?,?);',
-          [max_img_no + 1, comment, now, imgnum2, req.session.users.id]);
-
+          [max_com_no + 1, comment, now, imgnum2, req.session.users.id]);
         con.release(); 
       }
 
       if (count == 0) {
         await con.query('INSERT INTO comment (comment_no, comment, date, img_no, user_id) VALUES (?, ?,?,?,?);',
           [count + 1, comment, now, imgnum2, req.session.users.id]);
-
         con.release(); 
       }
 
-      const [img_comment]=await con.query('select * from photo.comment where img_no=?',
-      [imgnum2],
-      (err)=>{
-        if(err){
-          console.error('쿼리 오류:', err);
-            res.status(500).send('서버 에러');
-            con.release();
-            return;
-        }
-      });
-
-      console.log(img_comment[0]);
-      res.status(200).send('댓글 등록 성공');
+      res.status(200).redirect(`/photos/${imgnum2}`);
     } else {
       console.log('로그인하세요');
       res.status(500).redirect('/login.ejs');

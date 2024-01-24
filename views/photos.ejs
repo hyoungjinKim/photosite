@@ -16,7 +16,7 @@
         <div class="left"><img class="img" src="<%=img.img%>"></div>
         <div class="right">
             <div>
-                <button>Download</button>
+                <a href="<%=img.img%>" download="<%=img.title%>"><button >Download</button></a>
             </div>
             <% if (tag && tag.length > 0) { %>
                 <% tag.forEach((tagItem) => { %>
@@ -50,7 +50,26 @@
     </div>
     <hr class="split">
     <div id="commentpart">
-        댓글이 없습니다.
+        <% if(comment.length>0){%>
+            <% for(let i=0; i<comment.length; i++){%>
+                <div class="comment_wrap">
+                    <div class="Writer">
+                        <span>user</span><span class="date">(<%=comment[i].date%>)</span>
+                    </div>
+                    <div class="comment">
+                        <%=comment[i].comment%>
+                    </div>
+                    <div>
+                        <div><button onclick="Replywrite(this)">답글</button><button onclick="Replycancle(this)">취소</button></div>
+                        <div id="reply_input"></div>
+                    </div>
+                    <div class="reply_wrap" id="reply_wrap">
+                    </div>
+                </div>
+            <%}%>
+        <%}else{%>
+            댓글이 없습니다.
+        <%}%>
     </div>
     <hr>
     <div class="write_wrap">
