@@ -54,7 +54,9 @@
             <% for(let i=0; i<comment.length; i++){%>
                 <div class="comment_wrap">
                     <div class="Writer">
-                        <span>user</span><span class="date">(<%=comment[i].date%>)</span>
+                        <span><%=names[i].id%></span><span class="date">(<%=comment[i].date%>)</span>
+                        <span><form method="post" action="/comm_re"><button type="submit">수정</button></form></span>
+                        <span><form method="post" action="/del_re"><button type="submit">삭제</button></form></span>
                     </div>
                     <div class="comment">
                         <%=comment[i].comment%>

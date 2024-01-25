@@ -9,7 +9,7 @@ const multer = require('multer');
 const app= express();
 
 app.set('views', path.join(__dirname, '/views'));
-app.set('view engine', 'ejs'); //view engine이 사용할 Template Engine
+app.set('view engine', 'ejs');
 
 const storage=multer.diskStorage({
   destination: function(req,file,cd){
@@ -208,33 +208,36 @@ app.get('/photos/:photoId', async (req, res) => {
             }
             con.query('select * from photo.comment where img_no=?',
             [photoId],
-            (err, comment)=>{
+            async (err, comment)=>{
               if(err){
               console.error('쿼리 오류:', err);
               res.status(500).send('쿼리 에러');
               con.release();
               return;
             }
-              console.log(comment);
-              
-              con.query('SELECT * FROM photo.user where id=?;',
-              [comment.user_id],
-              (err, nickname)=>{
-                if(err){
-                  console.error('쿼리 오류:', err);
-                  res.status(500).send('쿼리 에러');
-                  con.release();
-                  return;
-                }
-                console.log(comment.user_id);
-                console.log(nickname);
-                res.render("photos.ejs", {
-                  img: img[0],
-                  tag: tag,
-                  user: user[0],
-                  comment: comment
+            
+            try {
+              const [com_user] = await con.promise().query('SELECT * FROM photo.comment WHERE img_no=?;', [photoId]);
+            
+              const namePromises = com_user.map(async (comment) => {
+                const [name] = await con.promise().query('SELECT * FROM photo.user WHERE id=?', [comment.user_id]);
+                return name[0];
               });
-            });  
+            
+              const names = await Promise.all(namePromises);
+              res.render("photos.ejs", {
+                img: img[0],
+                tag: tag,
+                user: user[0],
+                comment: comment,
+                names: names
+              });
+            } catch (err) {
+              console.error('쿼리 오류:', err);
+              res.status(500).send('서버 에러');
+            } finally {
+              con.release();
+            }
             });
           });
         });
@@ -481,6 +484,7 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
   }
 });
 
+
 //사진 삭제
 app.post('/delete', async (req, res) => {
   try {
@@ -613,7 +617,6 @@ app.post('/format_upload', upload.single('photo'), async(req,res)=>{
   }
 });
 
-
 //검색
 app.post('/search', async (req, res) => {
   try {
@@ -665,11 +668,41 @@ app.post('/search', async (req, res) => {
         [`%${search}%`]);
     }
     con.release();
+    req.session.search=search_title[0];
     console.log(search_title[0]);
     res.status(200).render('search.ejs', {
-      photo: search_title[0],
+      photo: search_title[0]
     });
   } catch (err) {
+    console.error('에러 발생:', err);
+    res.status(500).send('서버 에러');
+  }
+});
+
+//인기순 정렬
+app.post('/sort1', async(req,res)=>{
+  try{
+    const re_search=req.session.search;
+    console.log(re_search);
+    res.status(200).render('search.ejs', {
+      photo: re_search
+    });
+  }catch(err){
+    console.error('에러 발생:', err);
+    res.status(500).send('서버 에러');
+  }
+});
+
+//최신순 정렬
+app.post('/sort2', async(req,res)=>{
+  try{
+    const re_search=req.session.search;
+    console.log(re_search);
+    const sortedResults = [...re_search].sort((a, b) => a.Recommendation - b.Recommendation);
+    res.status(200).render('search.ejs', {
+      photo: sortedResults
+    });
+  }catch(err){
     console.error('에러 발생:', err);
     res.status(500).send('서버 에러');
   }
@@ -733,7 +766,6 @@ app.post('/scrap', async(req,res)=>{
           return;
         }
       });
-      console.log(row[0]);
       if(row[0] != undefined){
         con.query('DELETE FROM photo.scrap WHERE user_id=? AND img_no=?;', 
         [req.session.users.id,imgnum],
@@ -776,19 +808,15 @@ app.post('/comment', async (req, res) => {
       const comment = req.body.comment;
       const imgnum2 = req.body.index2;
       const con = await pool.promise().getConnection();
-      console.log('1'+comment);
-      console.log('2'+imgnum2);
       const date = new Date();
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
       const day = date.getDate();
       
       const now = `${year}-${month}-${day}`;
-      console.log(now);
       
       const [countResults] = await con.query('SELECT COUNT(*) AS count FROM comment;');
       const count = countResults[0].count;
-      console.log(count);
 
       if (count > 0) {
         const [rows] = await con.query('SELECT * FROM photo.comment;');
@@ -796,15 +824,13 @@ app.post('/comment', async (req, res) => {
 
         await con.query('INSERT INTO comment (comment_no, comment, date, img_no, user_id) VALUES (?, ?, ?, ?, ?);',
           [max_com_no + 1, comment, now, imgnum2, req.session.users.id]);
-        con.release(); 
+          con.release();
       }
-
       if (count == 0) {
         await con.query('INSERT INTO comment (comment_no, comment, date, img_no, user_id) VALUES (?, ?, ?, ?, ?);',
           [count + 1, comment, now, imgnum2, req.session.users.id]);
-        con.release(); 
+          con.release();
       }
-
       res.status(200).redirect(`/photos/${imgnum2}`);
     } else {
       console.log('로그인하세요');

@@ -45,13 +45,21 @@
       </form>
     <div class="tag_wrap" id="tag_wrap"></div>
     <div class="sorting_wrap">
-        <label for="sorting">정렬:</label>
-        <select name="sorting" id="sorting">
+        <form method="post" action="/sort2">
+          <label for="sorting">정렬:</label>
+          <select name="sorting" id="sorting">
             <option value="인기순">인기순</option>
+          </select>
+          <input type="submit" value="정렬 적용">
+        </form>
+        <form method="post" action="/sort1">
+          <label for="sorting">정렬:</label>
+          <select name="sorting" id="sorting">
             <option value="최신순">최신순</option>
-        </select>
-    </div>
-    
+          </select>
+          <input type="submit" value="정렬 적용">
+        </form>
+      </div>
     <table>
     <% if (photo && photo.length > 0) { %>
         <% for (let i = 0; i < photo.length; i += 4) { %>
