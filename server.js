@@ -12,7 +12,7 @@ app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
 const storage=multer.diskStorage({
-  destination: function(req,file,cd){
+  destination: function(cd){
     cd(null,"./public/images/");
   },
   filename: function(req,file,cd){
@@ -658,10 +658,14 @@ app.post('/search', async (req, res) => {
     }, []);
     
     let search_title;
+    let data;
     if (imgNos.length > 0) {
       // 이미지 번호가 있는 경우
       search_title = await con.query('SELECT * FROM photo.photo WHERE img_no IN (?) AND title LIKE ?',
         [imgNos, `%${search}%`]);
+    }else if(imgNos==0){
+      data=1;
+      search_title=[];
     } else {
       // 이미지 번호가 없는 경우 또는 태그가 선택되지 않은 경우
       search_title = await con.query('SELECT * FROM photo.photo WHERE title LIKE ?',
@@ -669,9 +673,10 @@ app.post('/search', async (req, res) => {
     }
     con.release();
     req.session.search=search_title[0];
-    console.log(search_title[0]);
     res.status(200).render('search.ejs', {
-      photo: search_title[0]
+      photo: search_title[0],
+      sort:0,
+      data: data
     });
   } catch (err) {
     console.error('에러 발생:', err);
@@ -679,29 +684,25 @@ app.post('/search', async (req, res) => {
   }
 });
 
-//인기순 정렬
-app.post('/sort1', async(req,res)=>{
-  try{
-    const re_search=req.session.search;
-    console.log(re_search);
-    res.status(200).render('search.ejs', {
-      photo: re_search
-    });
-  }catch(err){
-    console.error('에러 발생:', err);
-    res.status(500).send('서버 에러');
-  }
-});
-
-//최신순 정렬
+//정렬
 app.post('/sort2', async(req,res)=>{
   try{
     const re_search=req.session.search;
-    console.log(re_search);
-    const sortedResults = [...re_search].sort((a, b) => a.Recommendation - b.Recommendation);
-    res.status(200).render('search.ejs', {
-      photo: sortedResults
-    });
+    const sort=req.body.sorting;
+    console.log(sort);
+    if(sort=='인기순'){
+      const sortedResults = [...re_search].sort((a, b) => a.Recommendation - b.Recommendation);
+      res.status(200).render('search.ejs', {
+        photo: sortedResults,
+        sort:1
+      });
+    }else if(sort=='최신순'){
+      const re_search=req.session.search;
+      res.status(200).render('search.ejs', {
+        photo: re_search,
+        sort:2
+      });
+    }
   }catch(err){
     console.error('에러 발생:', err);
     res.status(500).send('서버 에러');

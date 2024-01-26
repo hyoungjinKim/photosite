@@ -94,6 +94,10 @@
     font-size: 180%;
 }
 
+.Writer{
+    display: flex;
+    flex-direction: row;
+}
 .date{
     margin-left: 0.5%;
     font-size: 60%;
@@ -129,6 +133,7 @@
     height: 80px;
     font-size: 120%;
     border-radius: 10px;
+    
 }
 
 .submit{

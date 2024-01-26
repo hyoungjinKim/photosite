@@ -45,20 +45,34 @@
       </form>
     <div class="tag_wrap" id="tag_wrap"></div>
     <div class="sorting_wrap">
+        <% if(sort == 2){ %>
         <form method="post" action="/sort2">
-          <label for="sorting">정렬:</label>
-          <select name="sorting" id="sorting">
-            <option value="인기순">인기순</option>
-          </select>
-          <input type="submit" value="정렬 적용">
-        </form>
-        <form method="post" action="/sort1">
-          <label for="sorting">정렬:</label>
-          <select name="sorting" id="sorting">
-            <option value="최신순">최신순</option>
-          </select>
-          <input type="submit" value="정렬 적용">
-        </form>
+            <label for="sorting">정렬:</label>
+            <select name="sorting" id="sorting">   
+              <option value="최신순">최신순</option>
+              <option value="인기순">인기순</option>
+            </select>
+            <input type="submit" value="정렬 적용">
+          </form>
+        <%}else if(sort==1){%>
+            <form method="post" action="/sort2">
+                <label for="sorting">정렬:</label>
+                <select name="sorting" id="sorting">   
+                  <option value="인기순">인기순</option>
+                  <option value="최신순">최신순</option>
+                </select>
+                <input type="submit" value="정렬 적용">
+            </form>
+        <%}else{%>
+            <form method="post" action="/sort2">
+                <label for="sorting">정렬:</label>
+                <select name="sorting" id="sorting">   
+                  <option value="최신순">최신순</option>
+                  <option value="인기순">인기순</option>
+                </select>
+                <input type="submit" value="정렬 적용">
+            </form>
+        <%}%>
       </div>
     <table>
     <% if (photo && photo.length > 0) { %>
@@ -71,7 +85,11 @@
             </td>
             <% } %>
         </tr>
-    <% } %>
+        <% } %>
+    <% }else if(data==1){ %>
+        <tr>
+            <td colspan="4">선택한 태그에 해당하는 사진이 없습니다.</td>
+        </tr>
     <% } else { %>
         <tr>
             <td colspan="4">No data available</td>
