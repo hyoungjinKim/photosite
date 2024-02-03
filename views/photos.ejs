@@ -54,13 +54,29 @@
             <% for(let i=0; i<comment.length; i++){%>
                 <div class="comment_wrap">
                     <div class="Writer">
-                        <span><%=names[i].id%></span><span class="date">(<%=comment[i].date%>)</span>
-                        <span><form method="post" action="/comm_re"><button type="submit">수정</button></form></span>
-                        <span><form method="post" action="/del_re"><button type="submit">삭제</button></form></span>
+                        <span><%=names[i].nickname%></span><span class="date">(<%=comment[i].date%>)</span>
+                        <%if(reqname==0){%>
+                        <%}%>
+                        <%if(names[i].nickname == reqname){%>
+                            <span id="recom">    
+                                    <button type="submit" onclick="recom()">수정</button>        
+                            </span>
+                            <span>
+                                <form method="post" action="/del_re">
+                                    <input type="hidden" name="index_com_no" value="<%=comment[i].comment_no%>">
+                                    <input type="hidden" name="index_img_no" value="<%=img.img_no%>">
+                                    <button type="submit">삭제</button>
+                                </form>
+                            </span>
+                        <%}%>
                     </div>
-                    <div class="comment">
-                        <%=comment[i].comment%>
-                    </div>
+                    <form method="post" action="/comm_re">
+                        <input type="hidden" name="index_com_no" value="<%=comment[i].comment_no%>">
+                        <input type="hidden" name="index_img_no" value="<%=img.img_no%>">
+                        <div class="comment" id="comment">
+                            <%=comment[i].comment%>
+                        </div>
+                    </form>
                     <div>
                         <div><button onclick="Replywrite(this)">답글</button><button onclick="Replycancle(this)">취소</button></div>
                         <div id="reply_input"></div>
