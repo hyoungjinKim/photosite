@@ -1,147 +1,161 @@
-.title_wrap{
-    font-size: 400%;
-    margin-top: 1%;
-    margin-left: 2%;
+.title_wrap {
+  font-size: 400%;
+  margin-top: 1%;
+  margin-left: 2%;
 }
 
-.title{
-    font-size: 80%;
+.title {
+  font-size: 80%;
 }
 
-.date{
-    font-size: 40%;
-    margin-left: 1%;
+.date {
+  font-size: 40%;
+  margin-left: 1%;
 }
 
-.container{
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
-.left{
-    width: 60%;
-    margin-left: 2%;
+.left {
+  width: 60%;
+  margin-left: 2%;
 }
 
-.img{
-    width: 60%;
-    object-fit: contain;
+.img {
+  width: 60%;
+  object-fit: contain;
 }
 
-.right{
-    width: 40%;
+.right {
+  width: 40%;
 }
 
-.right div{
-    font-size: 50px;
-    margin-top: 5%;
+.right div {
+  font-size: 50px;
+  margin-top: 5%;
 }
 
-.right div button{
-    font-size: 60px;
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 1%;
+.right div button {
+  font-size: 60px;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 1%;
 }
 
-.right div button:hover{
-    background-color: black;
-    color: white;
+.right div button:hover {
+  background-color: black;
+  color: white;
 }
 
-.explanation_wrap{
-    margin-left: 2%;
-    margin-top: 1%;
+.explanation_wrap {
+  margin-left: 2%;
+  margin-top: 1%;
 }
 
-.explanation_title{
-    font-size: 50px;
+.explanation_title {
+  font-size: 50px;
 }
 
-.explanation{
-    margin-top: 1%;
-    font-size: 30px;
-    margin-left: 1%;
+.explanation {
+  margin-top: 1%;
+  font-size: 30px;
+  margin-left: 1%;
 }
 
-.buttton_wrap{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
+.buttton_wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
 }
 
-.button{
-    font-size: 25px;
-    margin-left: 2%;
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 0.5%;
-    padding: 10%;
+.button {
+  font-size: 25px;
+  margin-left: 2%;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 0.5%;
+  padding: 10%;
 }
 
-.button_recom{
-    margin-right: 100%;
+.button_recom {
+  margin-right: 100%;
 }
 
-.button_scrap{
-    margin-left: 100%;
+.button_scrap {
+  margin-left: 100%;
 }
-.comment_wrap{
-    margin-left: 1%;
-    margin-top: 1%;
-    font-size: 180%;
-}
-
-.Writer{
-    display: flex;
-    flex-direction: row;
-}
-.date{
-    margin-left: 0.5%;
-    font-size: 60%;
+.comment_wrap {
+  margin-left: 1%;
+  margin-top: 1%;
+  font-size: 180%;
 }
 
-.comment{
-    margin-left: 1%;
+.Writer {
+  display: flex;
+  flex-direction: row;
+}
+.date {
+  margin-left: 0.5%;
+  font-size: 60%;
 }
 
-.reply_wrap{
-    margin-top: 1%;
-    margin-left: 4%;
-    font-size: 70%;
+.comment {
+  margin-left: 1%;
 }
 
-
-.write_wrap{
-    display: flex;
-    justify-content: center;
+.reply_wrap {
+  margin-top: 1%;
+  margin-left: 4%;
+  font-size: 70%;
 }
 
-.form{
-    width: 60%;
+.write_wrap {
+  display: flex;
+  justify-content: center;
 }
 
-.reply_input{
-    width: 30%;
-    resize: none;
+.form {
+  width: 60%;
 }
 
-.write{
-    width: 70%;
-    height: 80px;
-    font-size: 120%;
-    border-radius: 10px;
-    
+.reply_fi {
+  display: flex;
+  flex-direction: row;
 }
 
-.submit{
-    height: 40%;
-    font-size: 120%;
-    border: 1px solid black;
-    margin-left: 1%;
-    margin-top: 60px;
-    border-radius: 20px;
+.reply_input {
+  width: 30%;
+  resize: none;
 }
 
+.reply_date {
+  margin-left: 1%;
+  font-size: 80%;
+}
+
+.reply_del {
+  margin-left: 1%;
+}
+.reply_btn {
+  display: flex;
+  flex-direction: row;
+}
+.write {
+  width: 70%;
+  height: 80px;
+  font-size: 120%;
+  border-radius: 10px;
+}
+
+.submit {
+  height: 40%;
+  font-size: 120%;
+  border: 1px solid black;
+  margin-left: 1%;
+  margin-top: 60px;
+  border-radius: 20px;
+}

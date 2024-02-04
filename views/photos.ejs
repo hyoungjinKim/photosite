@@ -59,7 +59,7 @@
                         <%}%>
                         <%if(names[i].nickname == reqname){%>
                             <span id="recom">    
-                                    <button type="submit" onclick="recom()">수정</button>        
+                                <button type="button" onclick="toggleEditComment(`<%= comment[i].comment_no %>`)">수정</button>        
                             </span>
                             <span>
                                 <form method="post" action="/del_re">
@@ -70,19 +70,56 @@
                             </span>
                         <%}%>
                     </div>
-                    <form method="post" action="/comm_re">
-                        <input type="hidden" name="index_com_no" value="<%=comment[i].comment_no%>">
-                        <input type="hidden" name="index_img_no" value="<%=img.img_no%>">
                         <div class="comment" id="comment">
-                            <%=comment[i].comment%>
+                            <form method="post" action="/comm_re" class="edit_comment" id="edit_comment_<%= comment[i].comment_no %>" style="display: none;">
+                                <input type="hidden" name="index_com_no" value="<%=comment[i].comment_no%>">
+                                <input type="hidden" name="index_img_no" value="<%=img.img_no%>">
+                                <input type="text" name="com" value="<%= comment[i].comment %>">
+                                <button type="submit">완료</button>
+                            </form>
+                            <div class="re_comment" id="re_comment_<%= comment[i].comment_no %>" style="display: block;">
+                                <%=comment[i].comment%>
+                            </div>
                         </div>
-                    </form>
                     <div>
-                        <div><button onclick="Replywrite(this)">답글</button><button onclick="Replycancle(this)">취소</button></div>
-                        <div id="reply_input"></div>
+                        <div><button onclick="Replywrite(`<%= comment[i].comment_no %>`)">답글</button><button onclick="Replycancle(`<%= comment[i].comment_no %>`)">취소</button></div>
+                        <form method="post" action="/reply_input" id="reply_input_<%= comment[i].comment_no %>" style="display: none;">
+                            <input type="hidden" name="index_com_no" value="<%=comment[i].comment_no%>">
+                            <input type="hidden" name="index_img_no" value="<%=img.img_no%>">
+                            <input type="text" id="edit_comment_input_<%= comment[i].comment_no %>" name="reply">
+                            <button type="submit">완료</button>
+                        </form>
                     </div>
-                    <div class="reply_wrap" id="reply_wrap">
-                    </div>
+                        <% if(reply.length>0){ %>
+                            <% for(let j=0; j<reply.length; j++){%>
+                                <% if(comment[i].comment_no==reply[j].comment_no){%>
+                                    <div class="reply_wrap">
+                                        <div class="reply_fi">
+                                            <span><%=reply[j].nickname%></span><span class="reply_date">(<%=reply[j].date%>)</span>
+                                                <%if(names[i].nickname == reqname){%>  
+                                                    <span class="reply_btn">
+                                                        <button class="reply_del" onclick="Replychange('<%=reply[j].reply_no%>')">수정</button>
+                                                        <form method="post" action="/reply_del">
+                                                            <button class="reply_del">삭제</button>
+                                                            <input type="hidden" name="reply_no" value="<%=reply[j].reply_no%>">
+                                                            <input type="hidden" name="img_no" value="<%=img.img_no%>">
+                                                        </form>
+                                                    </span> 
+                                                <%}%>
+                                        </div>
+                                        <div>
+                                            <form method="post" action="/reply_ch" id="replychform_<%=reply[j].reply_no%>" style="display: none;">
+                                                <input type="hidden" name="reply_no" value="<%=reply[j].reply_no%>">
+                                                <input type="hidden" name="img_no" value="<%=img.img_no%>">
+                                                <input type="text" name="ch_reply" value="<%=reply[j].reply%>">
+                                                <button type="submit">완료</button>
+                                            </form>
+                                            <span id="reply_<%=reply[j].reply_no%>" style="display: block;"><%=reply[j].reply%></span>
+                                        </div>
+                                    </div>
+                                <%}%>
+                            <%}%>
+                        <%}%>
                 </div>
             <%}%>
         <%}else{%>
