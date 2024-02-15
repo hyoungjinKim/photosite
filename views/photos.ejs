@@ -96,7 +96,7 @@
                                     <div class="reply_wrap">
                                         <div class="reply_fi">
                                             <span><%=reply[j].nickname%></span><span class="reply_date">(<%=reply[j].date%>)</span>
-                                                <%if(names[i].nickname == reqname){%>  
+                                                <%if(replyuser[j].nickname == reqname){%>  
                                                     <span class="reply_btn">
                                                         <button class="reply_del" onclick="Replychange('<%=reply[j].reply_no%>')">수정</button>
                                                         <form method="post" action="/reply_del">

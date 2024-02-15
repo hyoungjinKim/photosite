@@ -97,7 +97,7 @@ app.get("/", async (req, res) => {
         const sort = [...rows].sort(
           (a, b) => b.Recommendation - a.Recommendation
         );
-        res.render("main.ejs", {
+        return res.render("main.ejs", {
           photo: rows,
           sort: sort,
         });
@@ -128,49 +128,12 @@ app.get("/scrap.ejs", async (req, res) => {
       const con = await pool.promise().getConnection();
       const id = req.session.users.id;
       const [img] = await con.query(
-        "SELECT * FROM photo.scrap where user_id = ?;",
-        [id],
-        (err) => {
-          if (err) {
-            console.error("태그 쿼리 오류:", err);
-            res.status(500).send("서버 에러");
-            con.release();
-            return;
-          }
-        }
+        "SELECT * FROM photo.scrap LEFT JOIN photo.photo ON scrap.img_no = photo.img_no WHERE scrap.user_id = ?;",
+        [id]
       );
-      console.log(1);
-      const imgnum = [];
-      const photoArray = [];
-
-      async function fetchData() {
-        for (let i = 0; i < img.length; i++) {
-          imgnum.push(img[i].img_no);
-
-          try {
-            const [photo] = await con.query(
-              "select * from photo.photo where img_no=?;",
-              [imgnum[i]]
-            );
-
-            photoArray.push(photo);
-          } catch (err) {
-            console.error("태그 쿼리 오류:", err);
-            res.status(500).send("서버 에러");
-            con.release();
-            return;
-          }
-          console.log(photoArray[i][0]);
-        }
-        res.status(200).render("scrap.ejs", {
-          scrap: img,
-          photo: photoArray,
-        });
-      }
-      fetchData();
-    } else {
-      console.log(`로그인하세요`);
-      res.status(500).redirect("/login.ejs");
+      res.status(200).render("scrap.ejs", {
+        photo: img,
+      });
     }
   } catch (err) {
     console.error("에러 발생:", err);
@@ -250,8 +213,14 @@ app.get("/photos/:photoId", async (req, res) => {
                             ]);
                           return name[0];
                         });
-
                         const names = await Promise.all(namePromises);
+
+                        const [reply_user] = await con
+                          .promise()
+                          .query(
+                            "select * from reply left join user on user.id=reply.user_id;"
+                          );
+
                         const [reply] = await con
                           .promise()
                           .query(
@@ -266,6 +235,7 @@ app.get("/photos/:photoId", async (req, res) => {
                             names: names,
                             reqname: req.session.users.name,
                             reply: reply,
+                            replyuser: reply_user,
                           });
                         } else {
                           return res.status(200).render("photos.ejs", {
@@ -574,13 +544,10 @@ app.post("/delete", async (req, res) => {
           console.log("파일이 성공적으로 삭제되었습니다.");
         });
 
-        await con.query("DELETE FROM photo.tag WHERE img_no=?;", [photo_no]);
-        con.release();
-
-        await con.query("DELETE FROM photo.photo WHERE img_no=?;", [photo_no]);
-        con.release();
-
-        await con.query("DELETE FROM photo.scrap WHERE img_no=?;", [photo_no]);
+        await con.query(
+          "DELETE FROM photo.tag, photo.photo, photo.scrap WHERE img_no = ?;",
+          [photo_no]
+        );
         con.release();
 
         res.status(200).redirect("/mypictures.ejs");
@@ -744,17 +711,16 @@ app.post("/search", async (req, res) => {
     }, []);
 
     let search_title;
-    let data;
     if (imgNos.length > 0) {
       // 이미지 번호가 있는 경우
       search_title = await con.query(
-        "SELECT * FROM photo.photo WHERE img_no IN (?) AND title LIKE ?",
+        "SELECT * FROM photo.photo WHERE img_no IN (?) AND title LIKE ?;",
         [imgNos, `%${search}%`]
       );
     } else {
       // 이미지 번호가 없는 경우 또는 태그가 선택되지 않은 경우
       search_title = await con.query(
-        "SELECT * FROM photo.photo WHERE title LIKE ?",
+        "SELECT * FROM photo.photo WHERE title LIKE ?;",
         [`%${search}%`]
       );
     }
@@ -1058,6 +1024,55 @@ app.post("/reply_ch", async (req, res) => {
         reply_no,
       ]);
       return res.status(200).redirect(`/photos/${img_no}`);
+    } else {
+      console.log("로그인하세요");
+      return res.status(500).redirect("/login.ejs");
+    }
+  } catch (err) {
+    console.error("에러 발생:", err);
+    return res.status(500).send("서버 에러");
+  }
+});
+
+//스크랩 검색
+app.post("/search_scrap", async (req, res) => {
+  try {
+    if (req.session.users) {
+      const title = req.body.search;
+      const con = await pool.promise().getConnection();
+      const [photo] = await con.query(
+        "select * from photo.photo left join scrap on photo.img_no=scrap.img_no where title LIKE ? and scrap.user_id=? and photo.img_no is not null;",
+        [`%${title}%`, `${req.session.users.id}`]
+      );
+      con.release();
+      console.log(photo[0]);
+      return res.status(200).render("scrap.ejs", {
+        photo: photo,
+      });
+    } else {
+      console.log("로그인하세요");
+      return res.status(500).redirect("/login.ejs");
+    }
+  } catch (err) {
+    console.error("에러 발생:", err);
+    return res.status(500).send("서버 에러");
+  }
+});
+
+//내 사진 검색
+app.post("/search_myphoto", async (req, res) => {
+  try {
+    if (req.session.users) {
+      const title = req.body.my_search;
+      const con = await pool.promise().getConnection();
+      const [photo] = await con.query(
+        "select * from photo where title like ? and user_id=?",
+        [`%${title}%`, req.session.users.id]
+      );
+      con.release();
+      return res.status(200).render("mypictures.ejs", {
+        photo: photo,
+      });
     } else {
       console.log("로그인하세요");
       return res.status(500).redirect("/login.ejs");
