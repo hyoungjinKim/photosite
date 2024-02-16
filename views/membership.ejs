@@ -1,36 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pictures</title>
-    <link rel="stylesheet" href="header/header.css">
-    <link rel="stylesheet" href="membership/membership.css">
+    <link rel="stylesheet" href="header/header.css" />
+    <link rel="stylesheet" href="membership/membership.css" />
     <script defer src="membership/membership.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <%- include('header.ejs') %>
-    <hr class="split">
+    <hr class="split" />
     <div class="container">
-        <form method="post" action="/process/adduser">
-            <div class="member">
-                <div class="wrap">
-                    <div><span>ID: </span><span class="input"><input type="text" name="id"></span></div>
-                </div>
-                <div class="wrap">
-                    <div><span>password: </span><span class="input"><input type="password" name="password"></span></div>
-                </div>
-                <div class="wrap">
-                    <div><span>Confirm password: </span><span class="input"><input type="password"></span></div>
-                </div>
-                <div class="wrap">
-                    <div><span>Nickname: </span><span class="input"><input type="text" name="nickname"></span></div>
-                </div>
-                <div class="submit">
-                    <button type="submit">submit</button>
-                </div>
+      <form method="post" action="/process/adduser">
+        <div class="member">
+          <div class="wrap">
+            <div>
+              <span>ID: </span
+              ><span class="input"><input type="text" name="id" /></span>
             </div>
-        </form>
+          </div>
+          <div class="wrap">
+            <div>
+              <span>password: </span
+              ><span class="input"
+                ><input type="password" id="pw" name="password"
+              /></span>
+            </div>
+          </div>
+          <div class="wrap">
+            <div>
+              <span>Confirm password: </span
+              ><span class="input"><input id="conpw" type="password" /></span>
+            </div>
+          </div>
+          <div class="wrap">
+            <div>
+              <span>Nickname: </span
+              ><span class="input"><input type="text" name="nickname" /></span>
+            </div>
+          </div>
+          <div class="submit">
+            <button type="submit">submit</button>
+          </div>
+        </div>
+      </form>
     </div>
-</body>
+  </body>
 </html>

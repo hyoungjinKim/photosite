@@ -527,9 +527,6 @@ app.post("/delete", async (req, res) => {
 
       if (rows.length > 0) {
         const photo_no = rows[req.body.index].img_no;
-        console.log("delete");
-        console.log(photo_no);
-
         const rows1 = await con.query(
           "SELECT * FROM photo.photo WHERE img_no=?;",
           [photo_no]
@@ -545,7 +542,7 @@ app.post("/delete", async (req, res) => {
         });
 
         await con.query(
-          "DELETE FROM photo.tag, photo.photo, photo.scrap WHERE img_no = ?;",
+          "DELETE FROM photo.tag, photo.photo, photo.scrap, photo.comment, photo.reply WHERE img_no = ?;",
           [photo_no]
         );
         con.release();
@@ -926,9 +923,10 @@ app.post("/del_re", async (req, res) => {
       const con = await pool.promise().getConnection();
       const com_no = req.body.index_com_no;
       const img_no = req.body.index_img_no;
-      await con.query("DELETE FROM photo.comment WHERE comment_no=?;", [
-        com_no,
-      ]);
+      await con.query(
+        "DELETE FROM photo.comment, photo.reply WHERE comment_no=?;",
+        [com_no]
+      );
       res.redirect(`/photos/${img_no}`);
     } else {
       console.log("로그인하세요");
@@ -978,8 +976,8 @@ app.post("/reply_input", async (req, res) => {
       const now = `${year}-${month}-${day}`;
       const con = await pool.promise().getConnection();
       await con.query(
-        "INSERT INTO reply (reply, date, comment_no, user_id) VALUES (?, ?, ?, ?);",
-        [reply, now, com_no, req.session.users.id]
+        "INSERT INTO reply (reply, date, comment_no, user_id, img_no) VALUES (?, ?, ?, ?, ?);",
+        [reply, now, com_no, req.session.users.id, img_no]
       );
       return res.status(200).redirect(`/photos/${img_no}`);
     } else {
