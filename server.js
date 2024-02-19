@@ -463,8 +463,8 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
       // 이미지 삽입
       if (count == 0) {
         await con.query(
-          "INSERT INTO photo (img_no, img, title, comment, user_id) VALUES (?, ?, ?, ?, ?);",
-          [count + 1, image, title, comment, userid]
+          "INSERT INTO photo (img_no, img, title, Recomendation,comment, user_id) VALUES (?, ?, ?,?, ?, ?);",
+          [count + 1, image, title, 0, comment, userid]
         );
         //tag 삽입
         if (Array.isArray(selectedTags)) {
@@ -541,10 +541,19 @@ app.post("/delete", async (req, res) => {
           console.log("파일이 성공적으로 삭제되었습니다.");
         });
 
-        await con.query(
-          "DELETE FROM photo.tag, photo.photo, photo.scrap, photo.comment, photo.reply WHERE img_no = ?;",
-          [photo_no]
-        );
+        await con.query("DELETE FROM photo.tag WHERE img_no = ?;", [photo_no]);
+        await con.query("DELETE FROM photo.reply WHERE img_no = ?;", [
+          photo_no,
+        ]);
+        await con.query("DELETE FROM photo.comment WHERE img_no = ?;", [
+          photo_no,
+        ]);
+        await con.query("DELETE FROM photo.scrap WHERE img_no = ?;", [
+          photo_no,
+        ]);
+        await con.query("DELETE FROM photo.photo  WHERE img_no = ?;", [
+          photo_no,
+        ]);
         con.release();
 
         res.status(200).redirect("/mypictures.ejs");
@@ -923,10 +932,11 @@ app.post("/del_re", async (req, res) => {
       const con = await pool.promise().getConnection();
       const com_no = req.body.index_com_no;
       const img_no = req.body.index_img_no;
-      await con.query(
-        "DELETE FROM photo.comment, photo.reply WHERE comment_no=?;",
-        [com_no]
-      );
+      await con.query("DELETE FROM photo.reply WHERE comment_no=?;", [com_no]);
+      await con.query("DELETE FROM photo.comment WHERE comment_no=?;", [
+        com_no,
+      ]);
+      con.release();
       res.redirect(`/photos/${img_no}`);
     } else {
       console.log("로그인하세요");
